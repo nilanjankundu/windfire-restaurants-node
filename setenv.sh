@@ -9,7 +9,3 @@ end=$'\e[0m'
 coffee=$'\xE2\x98\x95'
 coffee3="${coffee} ${coffee} ${coffee}"
 ##### Terminal Colors - END
-###################### ENVIRONMENT variables - START ####################
-CONFIG_DIR=/Users/robertopozzi/dev/rpozzi-restaurants-backend/app/config-docker
-CONFIG_DIR_MOUNT=/config
-###################### ENVIRONMENT variables - END ####################
