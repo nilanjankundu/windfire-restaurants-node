@@ -1,0 +1,19 @@
+{
+  "name": "windfire-restaurants-node",
+  "private": false,
+  "version": "1.0.0",
+  "description": "Windfire Restaurants backend services",
+  "loggerLevel": "debug",
+  "scripts": {
+    "start": "node app"
+  },
+  "dependencies": {
+    "express": "4.17.1",
+    "cors": "2.8.5",
+    "request": "2.68.0",
+    "log4js": "3.0.6",
+    "properties-reader": "0.3.1",
+    "connect-timeout": "1.9.0",
+    "mysql": "2.17.1"
+  }
+}
