@@ -11,21 +11,21 @@ Before starting to use and test this microservice you need to ensure all the pre
 * *npm* - Node.js Package Manager is distributed with Node.js, which means that when you download Node.js, you automatically get npm installed on your computer. The application has been developed and tested with npm v5.6.0.
 
 ## Run microservice on local
-This microservice can be run by simply launching **app-run.sh** script, available in the repository root folder.
+This microservice can be run by simply launching **app-run.sh** script, available in the */app* repository sub-folder.
 
 ## DevOps automation
 Automation is implemented using Ansible technology (https://www.ansible.com/): refer to Ansible technical documentation (https://docs.ansible.com/) for detailed instructions regarding installation and setup.
 
-The **deploy.sh** script is provided to run deployment automation tasks, as it can be seen in the figure below. 
+The **deploy.sh** and **undeploy.sh** scripts are provided to run deployment/undeployment automation tasks, as it can be seen in the figure below. 
 
 ![](images/deploy.png)
 
-The script currently exposes 4 deployment options:
-* *Raspberry* : it automates *Windfire Restaurants Backend* microservice deployment to a Raspberry Pi;
-* *AWS* : it automates *Windfire Restaurants Backend* microservice deployment to AWS.
+The scripts currently expose 2 deployment/undeployment options:
+* *Raspberry* : it automates *Windfire Restaurants Backend* microservice deployment/undeployment in a Raspberry Pi target architecture;
+* *AWS* : it automates *Windfire Restaurants Backend* microservice deployment/undeployment in a AWS target architecture.
 
 ### Raspberry deployment architecture
-A file, named **ansible.cfg**, is provided to set basic configurations needed to run Ansible: the **deploy.sh** script sets ANSIBLE_CONFIG environment variable pointing to this file; the basic configuration you should have is something like this:
+A file, named **ansible.cfg**, is provided to set basic configurations needed to run Ansible: the **deploy.sh** and **undeploy.sh** scripts set ANSIBLE_CONFIG environment variable pointing to this file; the basic configuration you should have is something like this:
 
 ![](images/ansible-config.png)
 where:
@@ -35,7 +35,7 @@ where:
 
 Change the parameters according to your environment.
 
-The script wraps Ansible to automate deployment tasks, using the Ansible provided playbook [deployment/raspberry/deploy.yaml](deployment/raspberry/deploy.yaml).
+The scripts wrap Ansible to automate deployment tasks, using the Ansible provided playbook [deployment/raspberry/deploy.yaml](deployment/raspberry/deploy.yaml) for deployment and the Ansible provided playbook [deployment/raspberry/remove.yaml](deployment/raspberry/remove.yaml) for microservice undeployment.
 
 
 ### AWS architecture
@@ -47,7 +47,7 @@ AWS target deployment environment is based on the following Architecture
 
 For security reasons, either the Frontend and Backend subnets are not directly accessible via SSH. Ansible automation script is configured to connect to the target hosts via a Bastion Host, conveniently placed in the Management subnet.
 
-In case of deployment to AWS, since the Cloud architecture is more dynamic by nature, the **deploy.sh** script delegates to [deployment/aws/ansible-config.sh](deployment/aws/ansible-config.sh) script the dynamic definition of 2 files that are used by Ansible:
+In case of deployment to AWS, since the Cloud architecture is more dynamic by nature, the **deploy.sh** and **undeploy.sh** scripts delegate to [deployment/aws/ansible-config.sh](deployment/aws/ansible-config.sh) script the dynamic definition of 2 files that are used by Ansible:
 
 * *ansible-aws.cfg*, which dynamically sets Ansible configuration. An example of such a configuration is reported in the following figure
 
@@ -57,4 +57,4 @@ In case of deployment to AWS, since the Cloud architecture is more dynamic by na
 
 ![]([TODO])
 
-The script wraps Ansible to automate deployment tasks, using the Ansible provided playbook [deployment/aws/deploy.yaml](deployment/aws/deploy.yaml).
+The scripts wrap Ansible to automate deployment tasks, using the Ansible provided playbook [deployment/aws/deploy.yaml](deployment/aws/deploy.yaml) for deployment and the Ansible provided playbook [deployment/aws/remove.yaml](deployment/aws/remove.yaml) for microservice undeployment.

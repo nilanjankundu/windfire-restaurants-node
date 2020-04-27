@@ -1,5 +1,5 @@
---- # Ansible Playbook to automate application deployment to AWS in a consistent and repeatable way
-- hosts: backend
+--- # Ansible Playbook to automate application removal from Raspberry Pis in a consistent and repeatable way
+- hosts: raspberry
   remote_user: "{{ user }}"
   become: yes
   vars:
@@ -8,7 +8,7 @@
     service_name: windfire-restaurants-node
     mode: u=rwx
   vars_files:
-    - "{{ src_dir }}/conf/aws-config.yml"
+    - "{{ src_dir }}/conf/raspberry-config.yml"
   tasks:
     - name: Install pm2 process manager for Node.js
       npm:
@@ -26,20 +26,3 @@
       file:
         path: "{{ remote_nodejs_dest_dir }}"
         state: absent
-    - name: Transfer Node.js Files
-      copy:
-        src: "{{ nodejs_src_dir }}"
-        dest: "{{ remote_nodejs_dest_dir }}"
-        owner: "{{ user }}"
-        group: "{{ group }}"
-        mode: "{{ mode }}"
-    - name: install node dependencies
-      shell: npm install
-      become: true
-      args:
-        chdir: "{{ remote_nodejs_app_dir }}"
-    - name: Start Node.js application service
-      command: pm2 start app.js --name {{ service_name }}
-      become: true
-      args:
-        chdir: "{{ remote_nodejs_app_dir }}"

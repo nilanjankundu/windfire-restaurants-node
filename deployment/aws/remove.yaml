@@ -1,4 +1,4 @@
---- # Ansible Playbook to automate application deployment to AWS in a consistent and repeatable way
+--- # Ansible Playbook to automate application removal from AWS in a consistent and repeatable way
 - hosts: backend
   remote_user: "{{ user }}"
   become: yes
@@ -26,20 +26,3 @@
       file:
         path: "{{ remote_nodejs_dest_dir }}"
         state: absent
-    - name: Transfer Node.js Files
-      copy:
-        src: "{{ nodejs_src_dir }}"
-        dest: "{{ remote_nodejs_dest_dir }}"
-        owner: "{{ user }}"
-        group: "{{ group }}"
-        mode: "{{ mode }}"
-    - name: install node dependencies
-      shell: npm install
-      become: true
-      args:
-        chdir: "{{ remote_nodejs_app_dir }}"
-    - name: Start Node.js application service
-      command: pm2 start app.js --name {{ service_name }}
-      become: true
-      args:
-        chdir: "{{ remote_nodejs_app_dir }}"

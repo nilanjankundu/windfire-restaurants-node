@@ -4,22 +4,42 @@
   become: yes
   vars:
     src_dir: "{{ playbook_dir }}"
-    angular_dist_dir: "{{ lookup('env', 'PWD') }}/dist/windfire-restaurants-ui"
+    nodejs_src_dir: "{{ lookup('env', 'PWD') }}/app"
+    service_name: windfire-restaurants-node
+    mode: u=rwx
   vars_files:
     - "{{ src_dir }}/conf/raspberry-config.yml"
-    - "{{ src_dir }}/conf/apache2.yml"
   tasks:
-    - name: Transfer Angular Files
+    - name: Install pm2 process manager for Node.js
+      npm:
+        name: pm2
+        global: yes
+        production: yes
+        state: present
+    - name: Stop Node.js application service {{ service_name }}
+      shell: pm2 stop {{ service_name }}
+      ignore_errors: yes
+    - name: Delete Node.js application service {{ service_name }}
+      shell: pm2 delete {{ service_name }}
+      ignore_errors: yes
+    - name: Clean Node.js application folder {{ remote_nodejs_dest_dir }}
+      file:
+        path: "{{ remote_nodejs_dest_dir }}"
+        state: absent
+    - name: Transfer Node.js Files
       copy:
-        src: "{{ angular_dist_dir }}"
-        dest: "{{ remote_app_home_dir }}"
-    - name: Clean Apache2 folder {{ apache2_doc_dir }}
-      file:
-        path: "{{ apache2_doc_dir }}/"
-        state: absent
-    - name: Copy Angular application files from {{ remote_app_home_dir }}/{{ remote_app_files_dir }} to Apache2 folder {{ apache2_doc_dir }}
-      shell: 'cp -r {{ remote_app_home_dir }}/{{ remote_app_files_dir }} {{ apache2_doc_dir }}'
-    - name: Clean folder {{ remote_app_home_dir }}/{{ remote_app_files_dir }}
-      file:
-        path: "{{ remote_app_home_dir }}/{{ remote_app_files_dir }}/"
-        state: absent
+        src: "{{ nodejs_src_dir }}"
+        dest: "{{ remote_nodejs_dest_dir }}"
+        owner: "{{ user }}"
+        group: "{{ group }}"
+        mode: "{{ mode }}"
+    - name: install node dependencies
+      shell: npm install
+      become: true
+      args:
+        chdir: "{{ remote_nodejs_app_dir }}"
+    - name: Start Node.js application service
+      command: pm2 start app.js --name {{ service_name }}
+      become: true
+      args:
+        chdir: "{{ remote_nodejs_app_dir }}"
