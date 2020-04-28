@@ -22,7 +22,7 @@ The **deploy.sh** and **undeploy.sh** scripts are provided to run deployment/und
 
 The scripts currently expose 2 deployment/undeployment options:
 * *Raspberry* : it automates *Windfire Restaurants Backend* microservice deployment/undeployment in a Raspberry Pi target architecture;
-* *AWS* : it automates *Windfire Restaurants Backend* microservice deployment/undeployment in a AWS target architecture.
+* *AWS (Single Zone with publicly accessible subnets)* : it automates *Windfire Restaurants Backend* microservice deployment to an AWS architecture with publicly accessible Frontend and Backend subnets
 
 ### Raspberry deployment architecture
 A file, named **ansible.cfg**, is provided to set basic configurations needed to run Ansible: the **deploy.sh** and **undeploy.sh** scripts set ANSIBLE_CONFIG environment variable pointing to this file; the basic configuration you should have is something like this:
@@ -51,10 +51,10 @@ In case of deployment to AWS, since the Cloud architecture is more dynamic by na
 
 * *ansible-aws.cfg*, which dynamically sets Ansible configuration. An example of such a configuration is reported in the following figure
 
-![]([TODO])
+![](images/ansible-aws.cfg.png)
 
 * *ansible-ssh.cfg*, which sets SSH configurations to allow Ansible to connect to Frontend and Backend instances, through the Bastion Host. An example of such a configuration is reported in the following figure
 
-![]([TODO])
+![](images/ansible-ssh.png)
 
 The scripts wrap Ansible to automate deployment tasks, using the Ansible provided playbook [deployment/aws/deploy.yaml](deployment/aws/deploy.yaml) for deployment and the Ansible provided playbook [deployment/aws/remove.yaml](deployment/aws/remove.yaml) for microservice undeployment.
