@@ -1,5 +1,5 @@
 # Windfire Restaurants Backend (Node.js version)
-This repository holds the code for the backend microservice of my *Windfire Restaurants* management application, along with scripts, playbooks and configurations to automate application run and deployment to target infrastructures. 
+This repository holds the code for the backend microservice of my *Windfire Restaurants* management application, along with scripts, playbooks and configurations to automate application run and deployment to target infrastructures.
 
 It is a simple microservice, running on Node.js, that serves a basic Hello World html page and exposes 2 REST endpoints:
 * */healthz* endpoint - it returns a string, testing that the application is up and healthy
@@ -20,9 +20,11 @@ The **deploy.sh** and **undeploy.sh** scripts are provided to run deployment/und
 
 ![](images/deploy.png)
 
-The scripts currently expose 2 deployment/undeployment options:
+The scripts currently expose 3 deployment/undeployment options:
 * *Raspberry* : it automates *Windfire Restaurants Backend* microservice deployment/undeployment in a Raspberry Pi target architecture;
-* *AWS (Single Zone with publicly accessible subnets)* : it automates *Windfire Restaurants Backend* microservice deployment to an AWS architecture with publicly accessible Frontend and Backend subnets
+* *AWS Single Zone* : it automates *Windfire Restaurants Backend* microservice deployment to an AWS architecture with publicly accessible Frontend and Backend subnets in a single availability zone
+* *AWS Multi Zone* : it automates *Windfire Restaurants Backend* microservice deployment to an AWS architecture with Frontend and Backend subnets in a variable number of availability zones to create a Fault Tolerant architecture
+
 
 ### Raspberry deployment architecture
 A file, named **ansible.cfg**, is provided to set basic configurations needed to run Ansible: the **deploy.sh** and **undeploy.sh** scripts set ANSIBLE_CONFIG environment variable pointing to this file; the basic configuration you should have is something like this:
