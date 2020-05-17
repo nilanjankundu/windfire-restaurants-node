@@ -44,7 +44,7 @@ printSelectPlatform()
 {
 	echo ${grn}Select deployment platform : ${end}
     echo "${grn}1. Raspberry${end}"
-    echo "${grn}2. AWS (Single Zone with publicly accessible subnets)${end}"
+    echo "${grn}2. AWS${end}"
 	read PLATFORM_OPTION
 	setDeployFunction
 }
