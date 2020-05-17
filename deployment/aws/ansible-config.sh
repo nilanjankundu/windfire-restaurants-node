@@ -41,8 +41,6 @@ createSSHConfigFile()
 			printSelectPlatform
 			;;
     esac
-    #BASTION_IP=$(terraform output -state=../windfire-restaurants-devops/aws/SingleZonePubSubnets/terraform.tfstate bastion-public_ip)
-    #BASTION_HOSTNAME=$(terraform output -state=../windfire-restaurants-devops/aws/SingleZonePubSubnets/terraform.tfstate bastion-public_dns)
     echo "Bastion Host IP   =" ${cyn}$BASTION_IP${end}
     echo "Bastion Hostname  =" ${cyn}$BASTION_HOSTNAME${end}
     echo
