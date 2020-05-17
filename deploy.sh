@@ -3,6 +3,8 @@ source app/setenv.sh
 # ##### START - Variable section
 SCRIPT=deploy.sh
 PLATFORM_OPTION=$1
+AWS_ACCESS_KEY=$2
+AWS_SECRET_KEY=$3
 DEPLOY_FUNCTION=
 # ##### END - Variable section
 
@@ -19,6 +21,10 @@ deployToRaspberry()
 
 deployToAWS()
 {
+    printInsertAWS_KEY
+    printInsertAWS_SECRET
+    export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY
+    export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
 	## Deploy Node.js application to AWS
     echo ${cyn}Deploy application to AWS ...${end}
     ANSIBLE_CONFIG_FILE=ansible-aws.cfg
@@ -40,11 +46,24 @@ deploy()
     $DEPLOY_FUNCTION
 }
 
+printInsertAWS_KEY()
+{
+	echo ${grn}Insert AWS Key : ${end}
+	read AWS_ACCESS_KEY
+}
+
+printInsertAWS_SECRET()
+{
+	echo ${grn}Insert AWS Secret : ${end}
+	read AWS_SECRET_KEY
+}
+
 printSelectPlatform()
 {
 	echo ${grn}Select deployment platform : ${end}
     echo "${grn}1. Raspberry${end}"
-    echo "${grn}2. AWS${end}"
+    echo "${grn}2. AWS Single Zone${end}"
+    echo "${grn}3. AWS Multi Zone${end}"
 	read PLATFORM_OPTION
 	setDeployFunction
 }
