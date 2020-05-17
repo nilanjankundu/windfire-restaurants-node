@@ -1,5 +1,6 @@
 # ##### START - Variable section
 ANSIBLE_CONFIG_FILE=$1
+PLATFORM_OPTION=$2
 SSH_PRIVATE_KEY_FILE=aws-key.pem
 SSH_CONFIG_FILE=ansible-ssh.cfg
 BASTION_IP=

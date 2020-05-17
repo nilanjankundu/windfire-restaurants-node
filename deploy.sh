@@ -33,7 +33,7 @@ deployToAWS()
     echo ${cyn}Deploy application to AWS ...${end}
     ANSIBLE_CONFIG_FILE=ansible-aws.cfg
     echo ${cyn}Invoking ansible-config.sh to dynamically create configuration files for Ansible ...${end}
-    deployment/aws/ansible-config.sh $ANSIBLE_CONFIG_FILE
+    deployment/aws/ansible-config.sh $ANSIBLE_CONFIG_FILE $PLATFORM_OPTION
     export ANSIBLE_CONFIG=$PWD/deployment/aws/$ANSIBLE_CONFIG_FILE
     echo
     ansible-playbook -i deployment/aws/windfire.aws_ec2.yaml deployment/aws/deploy.yaml
@@ -78,6 +78,8 @@ setDeployFunction()
 		1)  DEPLOY_FUNCTION="deployToRaspberry"
 			;;
         2)  DEPLOY_FUNCTION="deployToAWS"
+            ;;
+        3)  DEPLOY_FUNCTION="deployToAWS"
             ;;
 		*) 	printf "\n${red}No valid option selected${end}\n"
 			printSelectPlatform
