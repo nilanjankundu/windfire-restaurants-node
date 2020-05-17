@@ -1,5 +1,5 @@
 # Windfire Restaurants Backend (Node.js version)
-This repository holds the code for the backend microservice of my *Windfire Restaurants* management application, along with scripts, playbooks and configurations to automate application run and deployment to target infrastructures.
+This repository holds the code for the backend microservice of my *Windfire Restaurants* management application, along with scripts, playbooks and configurations to automate application run and deployment to target infrastructures. 
 
 It is a simple microservice, running on Node.js, that serves a basic Hello World html page and exposes 2 REST endpoints:
 * */healthz* endpoint - it returns a string, testing that the application is up and healthy
