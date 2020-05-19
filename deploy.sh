@@ -31,11 +31,13 @@ deployToAWS()
     export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
 	## Deploy Node.js application to AWS
     echo ${cyn}Deploy application to AWS ...${end}
+    ## Dynamically create Ansible configuration files for AWS deployment
     ANSIBLE_CONFIG_FILE=ansible-aws.cfg
     echo ${cyn}Invoking ansible-config.sh to dynamically create configuration files for Ansible ...${end}
     deployment/aws/ansible-config.sh $ANSIBLE_CONFIG_FILE $PLATFORM_OPTION
     export ANSIBLE_CONFIG=$PWD/deployment/aws/$ANSIBLE_CONFIG_FILE
     echo
+    ## Run Ansible playbook for AWS deployment
     ansible-playbook -i deployment/aws/windfire.aws_ec2.yaml deployment/aws/deploy.yaml
     echo ${cyn}Done${end}
     echo
