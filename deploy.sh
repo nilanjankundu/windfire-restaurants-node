@@ -1,4 +1,4 @@
-source app/setenv.sh
+source setenv.sh
 
 # ##### START - Variable section
 SCRIPT=deploy.sh
