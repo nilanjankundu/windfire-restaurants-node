@@ -11,14 +11,14 @@ app.use(errorHandler);
 app.use(timeout(5000));
 app.use(haltOnTimedout);
 // Variables section
-var PORT = 8082;
+var PORT = process.env.EXPOSED_PORT || 8082;
 // Routers setup
 require("./routers/health")(app, logger);
 require("./routers/restaurant")(app, logger);
 // Run server
 app.listen(PORT, function() {
 	logger.info("Current working directory = " + process.cwd());
-	logger.info("Application is listening on port " + (process.env.EXPOSED_PORT || PORT));
+	logger.info("Application is listening on port " + PORT);
 });
 // ############ Common Functions
 // Halt timeout
