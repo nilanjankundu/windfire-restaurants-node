@@ -1,0 +1,19 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineRun
+metadata:
+  name: nodejs-build-deploy-pl-run
+spec:
+  params:
+  - name: pathToDockerFile
+    value: Dockerfile
+  - name: pathToContext
+    value: /workspace/git-source/
+  pipelineRef:
+    name: nodejs-build-deploy-pl
+  resources:
+  - name: git-source
+    resourceRef:
+      name: windfire-restaurants-node-git
+  - name: image
+    resourceRef:
+      name: windfire-restaurants-node-image
