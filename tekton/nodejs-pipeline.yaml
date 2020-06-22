@@ -1,0 +1,157 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: windfire-restaurants-node-git
+spec:
+  type: git
+  params:
+    - name: revision
+      value: master
+    - name: url
+      value: https://github.com/robipozzi/windfire-restaurants-node
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: windfire-restaurants-node-image
+spec:
+  type: image
+  params:
+    - name: url
+      value: docker.io/robipozzi/windfire-restaurants-node #configure: replace with where the image should go: perhaps your local registry or Dockerhub with a secret and configured service account
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: nodejs-build-deploy-pl
+spec:
+  resources:
+    - name: git-source
+      type: git
+    - name: image
+      type: image
+  tasks:
+    - name: image-build-push-task
+      taskRef:
+        kind: Task
+        name: build-image-from-git-source  
+      resources:
+        inputs:
+          - name: git-source
+            resource: git-source
+        outputs:
+          - name: image
+            resource: image
+      params:
+        - name: pathToDockerFile
+          value: Dockerfile
+        - name: pathToContext
+          value: /workspace/git-source/
+    - name: container-deploy-task
+      taskRef:
+          kind: Task
+          name: deploy-image
+      resources:
+        inputs:
+          - name: image
+            resource: image
+            from:
+              - image-build-push-task
+      params:
+        - name: deploy-args
+          value:
+            - new-app
+            - '--docker-image'
+            - $(inputs.resources.image.url)
+        - name: route-expose-args
+          value:
+            - expose
+            - svc/windfire-restaurants-node
+      #runAfter:
+      #  - image-build-push-task
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: build-image-from-git-source
+spec:
+  inputs:
+    resources:
+      - name: git-source
+        type: git
+    params:
+      - name: pathToDockerFile
+        type: string
+        default: Dockerfile
+        description: The path to the dockerfile to build
+      - name: pathToContext
+        type: string
+        default: /workspace/git-source
+        description:
+          The build context used by Kaniko
+          (https://github.com/GoogleContainerTools/kaniko#kaniko-build-contexts)
+  outputs:
+    resources:
+      - name: image
+        type: image
+  steps:
+    - name: view-source-content
+      image: ubuntu
+      command:
+        - /bin/sh
+      args:
+        - '-c'
+        - ls -la git-source
+    - name: echo
+      image: ubuntu
+      command:
+        - echo
+      args:
+        - "pathToDockerFile is : "
+        - "$(inputs.params.pathToDockerFile)"
+        - "pathToContext is : "
+        - "$(inputs.params.pathToContext)"
+        - "Image to deploy is : "
+        - "$(outputs.resources.image.url)"
+    - name: build-and-push
+      image: gcr.io/kaniko-project/executor:v0.15.0
+      # specifying DOCKER_CONFIG is required to allow kaniko to detect docker credential
+      env:
+        - name: "DOCKER_CONFIG"
+          value: "/tekton/home/.docker/"
+      command:
+        - /kaniko/executor
+      args:
+        - --dockerfile=$(inputs.params.pathToDockerFile)
+        - --destination=$(outputs.resources.image.url)
+        - --context=$(inputs.params.pathToContext)
+---
+apiVersion: tekton.dev/v1alpha1
+kind: Task
+metadata:
+  name: deploy-image
+spec:
+  inputs:
+    resources:
+      - name: image
+        type: image
+    params:
+      - name: deploy-args
+        type: array
+        description: The OpenShift CLI arguments to run for image deployment
+      - name: route-expose-args
+        type: array
+        description: The OpenShift CLI arguments to run for route exposure
+  steps:
+    - name: deploy
+      image: 'quay.io/openshift/origin-cli:latest'
+      command:
+        - /usr/bin/oc
+      args:
+        - $(inputs.params.deploy-args)
+    - name: expose-route
+      image: 'quay.io/openshift/origin-cli:latest'
+      command:
+        - /usr/bin/oc
+      args:
+        - $(inputs.params.route-expose-args)
