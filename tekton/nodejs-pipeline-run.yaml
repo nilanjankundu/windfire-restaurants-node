@@ -3,6 +3,7 @@ kind: PipelineRun
 metadata:
   name: nodejs-build-deploy-pl-run
 spec:
+  serviceAccountName: tekton-serviceaccount
   params:
   - name: pathToDockerFile
     value: Dockerfile
