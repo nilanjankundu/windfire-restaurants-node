@@ -7,5 +7,5 @@ kubectl create secret docker-registry dockerhub-secret \
 kubectl apply -f tekton-serviceaccount.yaml
 kubectl apply -f nodejs-pipeline.yaml
 
-tkn task describe build-image-from-git-source
+tkn task describe build-push-image
 tkn task describe deploy-image

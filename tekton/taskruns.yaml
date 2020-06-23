@@ -1,11 +1,11 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TaskRun
 metadata:
-  name: build-image-from-git-source-task-run
+  name: build-push-image-taskrun
 spec:
   serviceAccountName: tekton-serviceaccount
   taskRef:
-    name: build-image-from-git-source
+    name: build-push-image
   inputs:
     resources:
       - name: git-source
@@ -15,7 +15,7 @@ spec:
       - name: pathToDockerFile
         value: Dockerfile
       - name: pathToContext
-        value: /workspace/git-source/
+        value: /workspace/git-source
   outputs:
     resources:
       - name: image
@@ -25,9 +25,9 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: TaskRun
 metadata:
-  name: deploy-image-task-run
+  name: deploy-image-taskrun
 spec:
-  #serviceAccountName: tekton-serviceaccount
+  serviceAccountName: tekton-serviceaccount
   taskRef:
     name: deploy-image
   inputs:
