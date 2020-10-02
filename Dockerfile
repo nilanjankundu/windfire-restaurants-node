@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/node:12
+FROM registry.access.redhat.com/openshift3/node 
 LABEL author="Roberto Pozzi"
 # Update libs
 RUN apt-get update \ 
