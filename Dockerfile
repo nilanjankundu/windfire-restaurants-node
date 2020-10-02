@@ -1,4 +1,4 @@
-FROM node:12.14.1
+FROM registry.access.redhat.com/node:12
 LABEL author="Roberto Pozzi"
 # Update libs
 RUN apt-get update \ 
