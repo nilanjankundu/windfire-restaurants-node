@@ -1,4 +1,4 @@
-FROM registry.access.redhat.com/openshift3/node 
+FROM registry.access.redhat.com/ubi8/nodejs-12
 LABEL author="Roberto Pozzi"
 # Update libs
 #RUN apt-get update \ 
