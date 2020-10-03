@@ -11,8 +11,8 @@ DEPLOY_FUNCTION=
 # ***** START - Function section
 deployToRaspberry()
 {
-	## Deploy Node.js application to remote Raspberry box
-    echo ${cyn}Deploy application to Raspberry Pi ...${end}
+	## Deploy Windfire Restaurants backend component to remote Raspberry box
+    echo ${cyn}Deploy Windfire Restaurants backend component to Raspberry Pi ...${end}
     export ANSIBLE_CONFIG=$PWD/deployment/raspberry/ansible.cfg
     ansible-playbook deployment/raspberry/deploy.yaml 
     echo ${cyn}Done${end}
@@ -29,8 +29,8 @@ deployToAWS()
     fi
     export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY
     export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_KEY
-	## Deploy Node.js application to AWS
-    echo ${cyn}Deploy application to AWS ...${end}
+	## Deploy Windfire Restaurants backend component to AWS
+    echo ${cyn}Deploy Windfire Restaurants backend component to AWS ...${end}
     ## Dynamically create Ansible configuration files for AWS deployment
     ANSIBLE_CONFIG_FILE=ansible-aws.cfg
     echo ${cyn}Invoking ansible-config.sh to dynamically create configuration files for Ansible ...${end}
@@ -45,8 +45,8 @@ deployToAWS()
 
 deployToOpenShift()
 {
-	## Deploy Node.js application to Red Hat OpenShift
-    echo ${cyn}Deploy application to Red Hat OpenShift ...${end}
+	## Deploy Windfire Restaurants backend component to Red Hat OpenShift
+    echo ${cyn}Deploy Windfire Restaurants backend component to Red Hat OpenShift ...${end}
     deployment/openshift/deploy.sh
     echo ${cyn}Done${end}
     echo

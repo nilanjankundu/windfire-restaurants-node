@@ -86,6 +86,14 @@ objects:
         containers:
         - image: windfire-restaurants-backend:latest
           name: windfire-restaurants-backend
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: 8082
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 8082
           ports:
           - containerPort: 8080
             protocol: TCP

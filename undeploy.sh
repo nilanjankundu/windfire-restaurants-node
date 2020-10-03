@@ -9,8 +9,8 @@ DEPLOY_FUNCTION=
 # ***** START - Function section
 undeployFromRaspberry()
 {
-	## Undeploy Node.js application from remote Raspberry box
-    echo ${cyn}Undeploy application from Raspberry Pi ...${end}
+	## Undeploy Windfire Restaurants backend component from remote Raspberry box
+    echo ${cyn}Undeploy Windfire Restaurants backend component from Raspberry Pi ...${end}
     export ANSIBLE_CONFIG=$PWD/deployment/raspberry/ansible.cfg
     ansible-playbook deployment/raspberry/remove.yaml 
     echo ${cyn}Done${end}
@@ -19,8 +19,8 @@ undeployFromRaspberry()
 
 undeployFromAWS()
 {
-	## Undeploy Node.js application from AWS
-    echo ${cyn}Uneploy application from AWS ...${end}
+	## Undeploy Windfire Restaurants backend component from AWS
+    echo ${cyn}Uneploy Windfire Restaurants backend component from AWS ...${end}
     ANSIBLE_CONFIG_FILE=ansible-aws.cfg
     echo ${cyn}Invoking ansible-config.sh to dynamically create configuration files for Ansible ...${end}
     deployment/aws/ansible-config.sh $ANSIBLE_CONFIG_FILE
@@ -33,8 +33,8 @@ undeployFromAWS()
 
 undeployFromOpenShift()
 {
-	## Undeploy Node.js application from Red Hat OpenShift
-    echo ${cyn}Undeploy application from Red Hat OpenShift ...${end}
+	## Undeploy Windfire Restaurants backend component from Red Hat OpenShift
+    echo ${cyn}Undeploy Windfire Restaurants backend component from Red Hat OpenShift ...${end}
     deployment/openshift/undeploy.sh
     echo ${cyn}Done${end}
     echo
