@@ -31,6 +31,15 @@ undeployFromAWS()
     echo
 }
 
+undeployFromOpenShift()
+{
+	## Undeploy Node.js application from Red Hat OpenShift
+    echo ${cyn}Undeploy application from Red Hat OpenShift ...${end}
+    deployment/openshift/undeploy.sh
+    echo ${cyn}Done${end}
+    echo
+}
+
 undeploy()
 {
     if [ -z $PLATFORM_OPTION ]; then 
@@ -44,6 +53,7 @@ printSelectPlatform()
 	echo ${grn}Select deployment platform : ${end}
     echo "${grn}1. Raspberry${end}"
     echo "${grn}2. AWS${end}"
+    echo "${grn}3. OpenShift${end}"
 	read PLATFORM_OPTION
 	setUnDeployFunction
 }
@@ -54,6 +64,8 @@ setUnDeployFunction()
 		1)  DEPLOY_FUNCTION="undeployFromRaspberry"
 			;;
         2)  DEPLOY_FUNCTION="undeployFromAWS"
+            ;;
+        3)  DEPLOY_FUNCTION="undeployFromOpenShift"
             ;;
 		*) 	printf "\n${red}No valid option selected${end}\n"
 			printSelectPlatform

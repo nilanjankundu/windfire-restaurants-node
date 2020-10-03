@@ -43,6 +43,15 @@ deployToAWS()
     echo
 }
 
+deployToOpenShift()
+{
+	## Deploy Node.js application to Red Hat OpenShift
+    echo ${cyn}Deploy application to Red Hat OpenShift ...${end}
+    deployment/openshift/deploy.sh
+    echo ${cyn}Done${end}
+    echo
+}
+
 deploy()
 {
     rm -rf $PWD/app/node_modules
@@ -70,6 +79,7 @@ printSelectPlatform()
     echo "${grn}1. Raspberry${end}"
     echo "${grn}2. AWS Single Zone${end}"
     echo "${grn}3. AWS Multi Zone${end}"
+    echo "${grn}4. OpenShift${end}"
 	read PLATFORM_OPTION
 	setDeployFunction
 }
@@ -82,6 +92,8 @@ setDeployFunction()
         2)  DEPLOY_FUNCTION="deployToAWS"
             ;;
         3)  DEPLOY_FUNCTION="deployToAWS"
+            ;;
+        4)  DEPLOY_FUNCTION="deployToOpenShift"
             ;;
 		*) 	printf "\n${red}No valid option selected${end}\n"
 			printSelectPlatform
