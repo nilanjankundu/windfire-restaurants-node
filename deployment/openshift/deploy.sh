@@ -6,6 +6,7 @@ RUN_FUNCTION=
 deploy()
 {
     echo "***************** TODO *****************"
+    oc new-app --name windfire-restaurants-backend https://github.com/robipozzi/windfire-restaurants-node -o yaml
 }
 # ***** END - Function section
 
