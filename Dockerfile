@@ -1,10 +1,10 @@
 FROM registry.access.redhat.com/ubi8/nodejs-12
 LABEL author="Roberto Pozzi"
 # Update libs
-#RUN apt-get update \ 
-#	&& apt-get -y upgrade \ 
-#	&& apt-get -y autoclean \ 
-#	&& apt-get -y autoremove \ 
+#RUN yum update \ 
+#	&& yum -y upgrade \ 
+#	&& yum -y autoclean \ 
+#	&& yum -y autoremove  
 #	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 WORKDIR "/app"
 # Copy application source files
