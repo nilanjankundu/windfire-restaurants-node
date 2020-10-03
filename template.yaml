@@ -1,0 +1,129 @@
+apiVersion: v1
+items:
+- apiVersion: image.openshift.io/v1
+  kind: ImageStream
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: windfire-restaurants-backend
+    name: windfire-restaurants-backend
+  spec:
+    lookupPolicy:
+      local: false
+  status:
+    dockerImageRepository: ""
+- apiVersion: build.openshift.io/v1
+  kind: BuildConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: windfire-restaurants-backend
+    name: windfire-restaurants-backend
+  spec:
+    nodeSelector: null
+    output:
+      to:
+        kind: ImageStreamTag
+        name: windfire-restaurants-backend:latest
+    postCommit: {}
+    resources: {}
+    source:
+      contextDir: app
+      git:
+        uri: https://github.com/robipozzi/windfire-restaurants-node
+      type: Git
+    strategy:
+      sourceStrategy:
+        from:
+          kind: ImageStreamTag
+          name: nodejs:10-SCL
+          namespace: openshift
+      type: Source
+    triggers:
+    - github:
+        secret: 1hox4xokRYo-BmvkQeFa
+      type: GitHub
+    - generic:
+        secret: Jelop3VLil7b2vRhyahV
+      type: Generic
+    - type: ConfigChange
+    - imageChange: {}
+      type: ImageChange
+  status:
+    lastVersion: 0
+- apiVersion: apps.openshift.io/v1
+  kind: DeploymentConfig
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: windfire-restaurants-backend
+    name: windfire-restaurants-backend
+  spec:
+    replicas: 1
+    selector:
+      app: windfire-restaurants-backend
+      deploymentconfig: windfire-restaurants-backend
+    strategy:
+      resources: {}
+    template:
+      metadata:
+        annotations:
+          openshift.io/generated-by: OpenShiftNewApp
+        creationTimestamp: null
+        labels:
+          app: windfire-restaurants-backend
+          deploymentconfig: windfire-restaurants-backend
+      spec:
+        containers:
+        - image: windfire-restaurants-backend:latest
+          name: windfire-restaurants-backend
+          ports:
+          - containerPort: 8080
+            protocol: TCP
+          resources: {}
+    test: false
+    triggers:
+    - type: ConfigChange
+    - imageChangeParams:
+        automatic: true
+        containerNames:
+        - windfire-restaurants-backend
+        from:
+          kind: ImageStreamTag
+          name: windfire-restaurants-backend:latest
+      type: ImageChange
+  status:
+    availableReplicas: 0
+    latestVersion: 0
+    observedGeneration: 0
+    replicas: 0
+    unavailableReplicas: 0
+    updatedReplicas: 0
+- apiVersion: v1
+  kind: Service
+  metadata:
+    annotations:
+      openshift.io/generated-by: OpenShiftNewApp
+    creationTimestamp: null
+    labels:
+      app: windfire-restaurants-backend
+    name: windfire-restaurants-backend
+  spec:
+    ports:
+    - name: 8080-tcp
+      port: 8080
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: windfire-restaurants-backend
+      deploymentconfig: windfire-restaurants-backend
+  status:
+    loadBalancer: {}
+kind: List
+metadata: {}
