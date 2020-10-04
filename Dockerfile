@@ -1,15 +1,11 @@
 FROM registry.access.redhat.com/ubi8/nodejs-12
 LABEL author="Roberto Pozzi"
-# Update libs
-#RUN yum update \ 
-#	&& yum -y upgrade \ 
-#	&& yum -y autoclean \ 
-#	&& yum -y autoremove  
-#	&& rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-WORKDIR "/app"
+ENV WORKING_DIR="/opt/app-root/src"
 # Copy application source files
-COPY app/ /app/
+COPY app/ $WORKING_DIR
 # Install app dependencies
-RUN cd /app; npm install; npm prune --production
+RUN cd $WORKING_DIR; npm install; npm prune --production
+WORKDIR $WORKING_DIR
+USER 1001
 EXPOSE 8082
 CMD ["npm", "start"]

@@ -7,13 +7,10 @@ RUN_FUNCTION=
 # ***** START - Function section
 deploy()
 {
-    echo ${red}***************** TODO *****************${end}
     oc new-project $OPENSHIFT_PROJECT
     oc project $OPENSHIFT_PROJECT
-    #oc new-app --name $OPENSHIFT_APP_LABEL https://github.com/robipozzi/windfire-restaurants-node --context-dir=app
+    oc new-app -f $PWD/deployment/openshift/windfire-restaurants-backend-template.yaml
     #oc patch svc OPENSHIFT_APP_LABEL --type=json -p '[{"op": "replace", "path": "/spec/ports/0/targetPort", "value":8082}]'
-    #oc expose svc $OPENSHIFT_APP_LABEL
-    oc new-app -f $PWD/deployment/openshift/windfire-restaurants-template.yaml
     ROUTE_URL=$(oc get route windfire-restaurants-backend -o jsonpath='{.spec.host}')
     echo Test it at ${grn}$ROUTE_URL${end}
 }

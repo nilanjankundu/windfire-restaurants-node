@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Template
 metadata:
-  name: windfire-restaurants
+  name: windfire-restaurants-backend
 objects:
 - apiVersion: image.openshift.io/v1
   kind: ImageStream
