@@ -4,7 +4,7 @@ metadata:
   name: "windfire-restaurants-node-pipeline"
 spec:
   source:
-    contextDir: deployment/openshift
+    #contextDir: deployment/openshift
     git:
       uri: "https://github.com/robipozzi/windfire-restaurants-node"
       ref: "master"
