@@ -60,3 +60,7 @@ In case of deployment to AWS, since the Cloud architecture is more dynamic by na
 ![](images/ansible-ssh.png)
 
 The scripts wrap Ansible to automate deployment tasks, using the Ansible provided playbook [deployment/aws/deploy.yaml](deployment/aws/deploy.yaml) for deployment and the Ansible provided playbook [deployment/aws/remove.yaml](deployment/aws/remove.yaml) for microservice undeployment.
+
+
+### OpenShift architecture
+[TODO]
