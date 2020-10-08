@@ -23,7 +23,8 @@ pipeline {
             steps {
                 echo '### Checking for compile errors ###'
                 sh '''
-                        echo $PWD
+                        echo Current dir is $PWD
+                        ls -la
                    '''
             }
         }
