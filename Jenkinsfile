@@ -3,17 +3,18 @@ pipeline {
         // set a timeout of 60 minutes for this pipeline
         timeout(time: 60, unit: 'MINUTES')
     }
-    agent any
-    /*agent {
+    
+    agent {
       node {
-        //TODO: Add label for the Maven jenkins agent
+        label 'nodejs'
       }
-    }*/
+    }
 
     environment {
         APP_NAME = "windfire-restaurants-backend"
         DEV_PROJECT = "windfire"
-        STAGE_PROJECT = "youruser-movies-stage"
+        STAGE_PROJECT = "windfire-stage"
+        PROD_PROJECT = "windfire-prod"
         APP_GIT_URL = "https://github.com/robipozzi/windfire-restaurants-node"
     }
 
@@ -21,10 +22,9 @@ pipeline {
         stage('Compilation Check') {
             steps {
                 echo '### Checking for compile errors ###'
-                // sh '''
-                //        cd ${APP_NAME}
-                //        mvn -s settings.xml -B clean compile
-                //   '''
+                sh '''
+                        echo $PWD
+                   '''
             }
         }
 
