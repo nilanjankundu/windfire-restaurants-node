@@ -24,7 +24,7 @@ pipeline {
                 sh '''
                         echo Current dir is $PWD
                         ls -la
-                        oc project
+                        oc project $DEV_PROJECT
                    '''
                 echo '### Cleaning existing resources in DEV env ###'
                 /*sh '''
