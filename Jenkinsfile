@@ -19,38 +19,13 @@ pipeline {
     }
 
     stages {
-        stage('Compilation Check') {
+        stage('Deploy to DEV environment') {
             steps {
-                echo '### Checking for compile errors ###'
                 sh '''
                         echo Current dir is $PWD
                         ls -la
+                        oc project
                    '''
-            }
-        }
-
-        stage('Run Unit Tests') {
-            steps {
-                echo '### Running unit tests ###'
-                //sh '''
-                //        cd ${APP_NAME}
-                //        mvn -s settings.xml -B clean test
-                //   '''
-            }
-        }
-
-        stage('Static Code Analysis') {
-            steps {
-                echo '### Running pmd on code ###'
-                //sh '''
-                //        cd ${APP_NAME}
-                //        mvn -s settings.xml -B clean pmd:check
-                //   '''
-            }
-        }
-
-        stage('Launch new app in DEV env') {
-            steps {
                 echo '### Cleaning existing resources in DEV env ###'
                 /*sh '''
                         oc delete all -l app=${APP_NAME} -n ${DEV_PROJECT}
