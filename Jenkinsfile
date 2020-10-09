@@ -21,12 +21,18 @@ pipeline {
     stages {
         stage('Deploy to DEV environment') {
             steps {
+                echo '### Environment Housekeeping ###'
                 sh '''
-                        echo Current dir is $PWD
-                        ls -la
-                        oc project $DEV_PROJECT
+                    echo Current directory is $PWD
+                    ls -la
+                    oc project $DEV_PROJECT
+                    APP_BUILD_CONFIG=$(oc get bc/windfire-restaurants-backend -o jsonpath='{.metadata.name}')
+                    echo BuildConfig for application is $APP_BUILD_CONFIG
                    '''
                 echo '### Cleaning existing resources in DEV env ###'
+                sh '''
+                    echo BuildConfig for application is $APP_BUILD_CONFIG
+                   '''
                 /*sh '''
                         oc delete all -l app=${APP_NAME} -n ${DEV_PROJECT}
                         oc delete all -l build=${APP_NAME} -n ${DEV_PROJECT}
@@ -35,11 +41,13 @@ pipeline {
                    '''*/
 
                 echo '### Creating a new app in DEV env ###'
-                sh '''
-                        TEST=$(oc get bc/windfire-restaurants-backend -o jsonpath='{.metadata.name}')
-                        echo $TEST
-                        
-                   '''
+                /*sh '''
+                        oc new-project $DEV_PROJECT
+                        oc project $DEV_PROJECT
+                        oc new-app -f $PWD/deployment/openshift/windfire-restaurants-backend-template.yaml
+                        ROUTE_URL=$(oc get route windfire-restaurants-backend -o jsonpath='{.spec.host}')
+                        echo Test it at ${grn}$ROUTE_URL${end}
+                   '''*/
                 /*script {
                     openshift.withCluster() {
                       openshift.withProject(env.DEV_PROJECT) {
