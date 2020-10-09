@@ -24,7 +24,7 @@ pipeline {
                 echo '### Environment Housekeeping ###'
                 script {
                         openshift.withCluster() {
-                            openshift.withProject('$DEV_PROJECT') {
+                            openshift.withProject('windfire') {
                                 echo "Using project: ${openshift.project()}"
                             }
                         }
