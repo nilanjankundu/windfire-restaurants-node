@@ -38,7 +38,7 @@ objects:
       contextDir: app
       git:
         uri: https://github.com/robipozzi/windfire-restaurants-node
-        ref: $GITHUB_BRANCH
+        ref: ${GITHUB_BRANCH}
       type: Git
     strategy:
       sourceStrategy:
