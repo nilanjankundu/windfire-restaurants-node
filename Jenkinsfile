@@ -23,9 +23,13 @@ pipeline {
             steps {
                 echo '### Environment Housekeeping ###'
                 script {
-                        openshift.withCluster() {
-                            openshift.withProject("$DEV_PROJECT") {
-                                echo "Using project: ${openshift.project()}"
+                    openshift.withCluster() {
+                        openshift.withProject("$DEV_PROJECT") {
+                            echo "Using project: ${openshift.project()}"
+                            if (openshift.selector("bc", APP_NAME).exists()) { 
+                                echo "BuildConfig exists"
+                            } else{
+                                echo "BuildConfig does not exist"
                             }
                         }
                     }
