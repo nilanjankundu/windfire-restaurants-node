@@ -27,12 +27,9 @@ pipeline {
                     ls -la
                     oc project $DEV_PROJECT
                     APP_BUILD_CONFIG=$(oc get bc/windfire-restaurants-backend -o jsonpath='{.metadata.name}')
-                    echo BuildConfig for application is $APP_BUILD_CONFIG
+                    //echo BuildConfig for application is $APP_BUILD_CONFIG
                    '''
                 echo '### Cleaning existing resources in DEV env ###'
-                sh '''
-                    echo BuildConfig for application is $APP_BUILD_CONFIG
-                   '''
                 /*sh '''
                         oc delete all -l app=${APP_NAME} -n ${DEV_PROJECT}
                         oc delete all -l build=${APP_NAME} -n ${DEV_PROJECT}
