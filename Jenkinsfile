@@ -36,11 +36,9 @@ pipeline {
 
                 echo '### Creating a new app in DEV env ###'
                 sh '''
-                        oc new-project $DEV_PROJECT
-                        oc project $DEV_PROJECT
-                        oc new-app -f $PWD/deployment/openshift/windfire-restaurants-backend-template.yaml
-                        ROUTE_URL=$(oc get route windfire-restaurants-backend -o jsonpath='{.spec.host}')
-                        echo Test it at ${grn}$ROUTE_URL${end}
+                        TEST=$(oc get bc/windfire-restaurants-backend -o jsonpath='{.metadata.name}')
+                        echo $TEST
+                        
                    '''
                 /*script {
                     openshift.withCluster() {
