@@ -33,6 +33,7 @@ pipeline {
                             }
                         }
                     }
+                }
                 /*sh '''
                     echo Current directory is $PWD
                     ls -la
