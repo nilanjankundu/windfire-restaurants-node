@@ -22,7 +22,14 @@ pipeline {
         stage('Deploy to DEV environment') {
             steps {
                 echo '### Environment Housekeeping ###'
-                sh '''
+                script {
+                        openshift.withCluster() {
+                            openshift.withProject() {
+                                echo "Using project: ${openshift.project()}"
+                            }
+                        }
+                    }
+                /*sh '''
                     echo Current directory is $PWD
                     ls -la
                     oc project $DEV_PROJECT
@@ -32,7 +39,7 @@ pipeline {
                     else
                         echo BuildConfig for application is $APP_BUILD_CONFIG
                     fi
-                   '''
+                   '''*/
                 echo '### Cleaning existing resources in DEV env ###'
                 /*sh '''
                         oc delete all -l app=${APP_NAME} -n ${DEV_PROJECT}
