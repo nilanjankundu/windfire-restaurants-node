@@ -30,7 +30,7 @@ pipeline {
                                 echo "BuildConfig " + APP_NAME + " exists, start new build to update app ..."
                             } else{
                                 echo "BuildConfig " + APP_NAME + " does not exist, creating app ..."
-                                openshift.newApp(deployment/openshift/windfire-restaurants-backend-template.yaml)
+                                openshift.newApp('deployment/openshift/windfire-restaurants-backend-template.yaml')
                             }
                         }
                     }
