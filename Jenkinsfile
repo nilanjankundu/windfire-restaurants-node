@@ -21,16 +21,16 @@ pipeline {
     stages {
         stage('Deploy to DEV environment') {
             steps {
-                echo '### Environment Housekeeping ###'
+                echo '### Deploy to DEV environment ###'
                 script {
                     openshift.withCluster() {
                         openshift.withProject("$DEV_PROJECT") {
                             echo "Using project: ${openshift.project()}"
                             if (openshift.selector("bc", APP_NAME).exists()) { 
-                                echo "BuildConfig " + APP_NAME + " exists"
+                                echo "BuildConfig " + APP_NAME + " exists, start new build to update app ..."
                             } else{
-                                echo "BuildConfig " + APP_NAME + " does not exist"
-                                openshift.newApp($PWD/deployment/openshift/windfire-restaurants-backend-template.yaml)
+                                echo "BuildConfig " + APP_NAME + " does not exist, creating app ..."
+                                openshift.newApp(deployment/openshift/windfire-restaurants-backend-template.yaml)
                             }
                         }
                     }
