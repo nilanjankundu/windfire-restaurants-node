@@ -30,12 +30,7 @@ pipeline {
                                 echo "BuildConfig " + APP_NAME + " exists"
                             } else{
                                 echo "BuildConfig " + APP_NAME + " does not exist"
-                                oc new-project $DEV_PROJECT
-                                oc project $DEV_PROJECT
-                                oc new-app -f $PWD/deployment/openshift/windfire-restaurants-backend-template.yaml
-                                #oc patch svc OPENSHIFT_APP_LABEL --type=json -p '[{"op": "replace", "path": "/spec/ports/0/targetPort", "value":8082}]'
-                                ROUTE_URL=$(oc get route windfire-restaurants-backend -o jsonpath='{.spec.host}')
-                                echo Test it at ${grn}$ROUTE_URL${end}
+                                openshift.newApp($PWD/deployment/openshift/windfire-restaurants-backend-template.yaml)
                             }
                         }
                     }
