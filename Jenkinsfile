@@ -27,24 +27,13 @@ pipeline {
                         openshift.withProject("$DEV_PROJECT") {
                             echo "Using project: ${openshift.project()}"
                             if (openshift.selector("bc", APP_NAME).exists()) { 
-                                echo "BuildConfig exists"
+                                echo "BuildConfig " + APP_NAME + " exists"
                             } else{
-                                echo "BuildConfig does not exist"
+                                echo "BuildConfig " + APP_NAME + " does not exist"
                             }
                         }
                     }
                 }
-                /*sh '''
-                    echo Current directory is $PWD
-                    ls -la
-                    oc project $DEV_PROJECT
-                    APP_BUILD_CONFIG=$(oc get bc/windfire-restaurants-backend -o jsonpath='{.metadata.name}')
-                    if [ -z $APP_BUILD_CONFIG ]; then 
-                        echo no BuildConfig
-                    else
-                        echo BuildConfig for application is $APP_BUILD_CONFIG
-                    fi
-                   '''*/
                 echo '### Cleaning existing resources in DEV env ###'
                 /*sh '''
                         oc delete all -l app=${APP_NAME} -n ${DEV_PROJECT}
