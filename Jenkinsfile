@@ -26,14 +26,12 @@ pipeline {
                     openshift.withCluster() {
                         openshift.withProject("$DEV_PROJECT") {
                             echo "Using project: ${openshift.project()}"
-                            
                             // If BuildConfig already exists, start a new build to update the application
                             if (openshift.selector("bc", APP_NAME).exists()) {
                                 echo "BuildConfig " + APP_NAME + " exists, start new build to update app ..."
                                 // Start new build (it corresponds to oc start-build <buildconfig>)
                                 def bc = openshift.selector("bc", "${APP_NAME}")
                                 bc.startBuild()
-                                // If a Route already exists, do nothing and just print Route info
                                 // If a Route does not exist, expose the Service and create the Route
                                 if (!openshift.selector("route", APP_NAME).exists()) {
                                     echo "Route " + APP_NAME + " does not exist, exposing service ..." 
