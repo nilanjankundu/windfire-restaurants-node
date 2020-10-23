@@ -37,18 +37,7 @@ pipeline {
                                     echo "Route " + APP_NAME + " does not exist, exposing service ..." 
                                     def service = openshift.selector("service", APP_NAME)
                                     service.expose()
-                                    //echo "Route " + APP_NAME + " exists" 
-                                    //route = openshift.selector("route", APP_NAME)
-                                    //echo "Test application with "
-                                    //def result = route.describe()                                    
                                 }
-                                // If a Route does not exist, expose the Service and create the Route
-                                /*else {
-                                    echo "Route " + APP_NAME + " does not exist, exposing service ..." 
-                                    def service = openshift.selector("service", APP_NAME)
-                                    service.expose()
-                                }*/
-                                //route = openshift.selector("route", APP_NAME)
                             } 
                             // If BuildConfig does not exist, deploy a new application using an OpenShift Template
                             else{
