@@ -20,10 +20,11 @@ The **deploy.sh** and **undeploy.sh** scripts are provided to run deployment/und
 
 ![](images/deploy.png)
 
-The scripts currently expose 3 deployment/undeployment options:
+The scripts currently expose 4 deployment/undeployment options:
 * *Raspberry* : it automates *Windfire Restaurants Backend* microservice deployment/undeployment in a Raspberry Pi target architecture;
 * *AWS Single Zone* : it automates *Windfire Restaurants Backend* microservice deployment to an AWS architecture with publicly accessible Frontend and Backend subnets in a single availability zone
 * *AWS Multi Zone* : it automates *Windfire Restaurants Backend* microservice deployment to an AWS architecture with Frontend and Backend subnets in a variable number of availability zones to create a Fault Tolerant architecture
+* *OpenShift* : it automates *Windfire Restaurants Backend* microservice deployment to an OpenShift cluster
 
 
 ### Raspberry deployment architecture
@@ -63,4 +64,4 @@ The scripts wrap Ansible to automate deployment tasks, using the Ansible provide
 
 
 ### OpenShift architecture
-[TODO]
+In case of deployment to OpenShift **deploy.sh** delegates to [deployment/openshift/deploy.sh](deployment/openshift/deploy.sh) script, which in turn [TODO]
