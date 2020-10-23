@@ -73,4 +73,6 @@ In case of deployment to OpenShift, **deploy.sh** delegates to [deployment/opens
 * *Route* that exposes the Service outside the OpenShift cluster
 
 #### Jenkins pipeline
-xxx [Jenkinsfile](Jenkinsfile)
+A BuildConfig definition of type JenkinsPipeline is also available at [deployment/openshift/buildconfig.yaml](deployment/openshift/buildconfig.yaml) to allow using Jenkins to automate build and deployment to OpenShift; the BuildConfig then delegates the build and deployment steps to [Jenkinsfile](Jenkinsfile)
+
+[TODO]
