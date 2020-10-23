@@ -30,6 +30,9 @@ pipeline {
                                 echo "BuildConfig " + APP_NAME + " exists, start new build to update app ..."
                                 def bc = openshift.selector("bc", "${APP_NAME}")
                                 bc.startBuild()
+                                if (openshift.selector("route", APP_NAME).exists()) {
+                                    echo "************ Route " + APP_NAME + " exists" 
+                                }
                             } else{
                                 echo "BuildConfig " + APP_NAME + " does not exist, creating app ..."
                                 openshift.newApp('deployment/openshift/windfire-restaurants-backend-template.yaml')
