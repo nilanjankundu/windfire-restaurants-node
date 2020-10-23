@@ -95,10 +95,16 @@ objects:
             httpGet:
               path: /
               port: 8082
+          resources:
+            limits:
+              cpu: 200m
+              memory: 512Mi
+            requests:
+              cpu: 100m
+              memory: 256Mi
           ports:
           - containerPort: 8080
             protocol: TCP
-          resources: {}
     test: false
     triggers:
     - type: ConfigChange
