@@ -32,8 +32,12 @@ pipeline {
                                 bc.startBuild()
                                 if (openshift.selector("route", APP_NAME).exists()) {
                                     def route = openshift.selector("route", APP_NAME)
+                                    def result = route.describe() 
                                     echo "Route " + APP_NAME + " exists" 
                                     echo "Test application at " + route 
+                                } else {
+                                    echo "Route " + APP_NAME + " does not exist, exposing service ..." 
+                                    openshift.expose("service", APP_NAME)
                                 }
                             } else{
                                 echo "BuildConfig " + APP_NAME + " does not exist, creating app ..."
