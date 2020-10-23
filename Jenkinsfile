@@ -31,13 +31,17 @@ pipeline {
                                 def bc = openshift.selector("bc", "${APP_NAME}")
                                 bc.startBuild()
                                 if (openshift.selector("route", APP_NAME).exists()) {
-                                    def route = openshift.selector("route", APP_NAME)
-                                    def result = route.describe() 
                                     echo "Route " + APP_NAME + " exists" 
-                                    echo "Test application at " + route 
+                                    def route = openshift.selector("route", APP_NAME)
+                                    echo "Test application with "
+                                    def result = route.describe()
+
+                                    def service = openshift.selector("service", APP_NAME)
+                                    service.expose()
                                 } else {
                                     echo "Route " + APP_NAME + " does not exist, exposing service ..." 
-                                    openshift.expose("service", APP_NAME)
+                                    def service = openshift.selector("service", APP_NAME)
+                                    service.expose()
                                 }
                             } else{
                                 echo "BuildConfig " + APP_NAME + " does not exist, creating app ..."
