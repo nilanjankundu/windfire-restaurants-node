@@ -85,8 +85,8 @@ objects:
           deploymentconfig: windfire-restaurants-backend
       spec:
         containers:
-        - image: windfire-restaurants-backend:latest
-          name: windfire-restaurants-backend
+        - name: windfire-restaurants-backend
+          image: windfire-restaurants-backend:latest
           livenessProbe:
             httpGet:
               path: /healthz
