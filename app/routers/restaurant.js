@@ -6,6 +6,7 @@ module.exports = function(app, logger) {
         logger.info("/restaurants endpoint called");
         logger.info("Calling restaurantService.getRestaurants() ...");
         restaurantService.getRestaurants(function(response) {
+            console.log("############# restaurant.js : " + response);
             res.json(response);
         });
     });

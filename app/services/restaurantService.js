@@ -4,9 +4,15 @@ var propertyReader = require('../utils/propertyReader');
 // Functions
 function getRestaurants(callback) {
 	logger.info("RestaurantService.getRestaurants called");
-	//readRestaurantList(callback);
-	//__NEW_readRestaurantList(callback)
-	__getFakeRestaurants(callback);
+	findRestaurants(function(items) {
+		callback(items);
+	})
+	//__getFakeRestaurants(callback);
+}
+
+function findRestaurants(callback) {
+	var restaurantDao = require('./restaurantDao');
+	restaurantDao.findAll(callback);
 }
 
 function readRestaurantList(callback) {
