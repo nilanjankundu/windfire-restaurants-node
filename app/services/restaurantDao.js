@@ -17,9 +17,9 @@ function findAll(callback) {
         const query = { name: 'Riviera Caterer' };
         console.log("######## Querying collection " + collection + " ...")
         dbo.collection(collection).find(query).toArray(function(err, result) {
-            console.log("######## Query result ...")
             if (err) 
                 throw err;
+            console.log("######## Query result ...")
             console.log(result);
             callback(result);
             db.close();
@@ -27,19 +27,18 @@ function findAll(callback) {
     });
 }
 
-function create(callback) {
+function create(restaurant, callback) {
     MongoClient.connect(uri, function(err, db) {
         console.log("######## Connecting to uri " + uri + "...")
         if (err) 
             throw err;
         console.log("######## Connecting db " + dbName + " ...")
-        var dbo = db.db(dbName);  
-        const query = { name: 'Riviera Caterer' };
-        console.log("######## Querying collection " + collection + " ...")
-        dbo.collection(collection).find(query).toArray(function(err, result) {
-            console.log("######## Query result ...")
+        var dbo = db.db(dbName);          
+        console.log("######## Insert into collection " + collection + " ...")
+        dbo.collection(collection).insertOne(restaurant, function(err, result) {
             if (err) 
                 throw err;
+            console.log("######## 1 document inserted ...")
             console.log(result);
             callback(result);
             db.close();
@@ -68,4 +67,5 @@ async function queryAsync() {
 //run().catch(console.dir);
 
 exports.findAll = findAll;
+exports.create = create;
 exports.queryAsync = queryAsync;
