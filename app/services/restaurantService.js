@@ -1,7 +1,11 @@
-// Add required modules
+// ##################################
+// ###### Add required modules ######
+// ##################################
 var logger = require('../utils/logger');
 var propertyReader = require('../utils/propertyReader');
-// Functions
+// ################################
+// ###### Exported Functions ######
+// ################################
 function getRestaurants(callback) {
 	logger.info("RestaurantService.getRestaurants called");
 	findRestaurants(function(items) {
@@ -10,6 +14,14 @@ function getRestaurants(callback) {
 	//__getFakeRestaurants(callback);
 }
 
+function addRestaurant(callback) {
+	logger.info("RestaurantService.addRestaurant called");
+	var restaurantDao = require('./restaurantDao');
+	restaurantDao.create(callback);
+}
+// ####################################
+// ###### Module inner Functions ######
+// ####################################
 function findRestaurants(callback) {
 	var restaurantDao = require('./restaurantDao');
 	restaurantDao.findAll(callback);
@@ -106,3 +118,4 @@ function __getFakeRestaurants(callback) {
 }
 
 exports.getRestaurants = getRestaurants;
+exports.addRestaurant = addRestaurant;

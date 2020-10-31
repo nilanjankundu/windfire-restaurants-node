@@ -27,6 +27,26 @@ function findAll(callback) {
     });
 }
 
+function create(callback) {
+    MongoClient.connect(uri, function(err, db) {
+        console.log("######## Connecting to uri " + uri + "...")
+        if (err) 
+            throw err;
+        console.log("######## Connecting db " + dbName + " ...")
+        var dbo = db.db(dbName);  
+        const query = { name: 'Riviera Caterer' };
+        console.log("######## Querying collection " + collection + " ...")
+        dbo.collection(collection).find(query).toArray(function(err, result) {
+            console.log("######## Query result ...")
+            if (err) 
+                throw err;
+            console.log(result);
+            callback(result);
+            db.close();
+        });
+    });
+}
+
 async function queryAsync() {
     const client = new MongoClient(uri);
     try {
