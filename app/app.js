@@ -5,6 +5,7 @@ var timeout = require('connect-timeout');
 var logger = require('./utils/logger');
 // Initialize application
 var app = express();
+app.use(express.json());
 app.use(cors());
 app.use(express.static(process.cwd() + '/public'));
 app.use(errorHandler);

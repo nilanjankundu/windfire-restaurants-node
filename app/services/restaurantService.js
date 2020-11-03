@@ -14,11 +14,10 @@ function getRestaurants(callback) {
 	//__getFakeRestaurants(callback);
 }
 
-function addRestaurant(obj, callback) {
+function addRestaurant(data, callback) {
 	logger.info("RestaurantService.addRestaurant called");
 	var restaurantDao = require('./restaurantDao');
-	var restaurant = obj;
-	restaurantDao.create(restaurant, callback);
+	restaurantDao.create(data, callback);
 }
 // ####################################
 // ###### Module inner Functions ######

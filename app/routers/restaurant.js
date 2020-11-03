@@ -7,23 +7,23 @@ module.exports = function(app, logger) {
     // #############################
     // ###### HTTP GET method ######
     // #############################
-    app.get('/restaurants', function (req, res) {
+    app.get('/restaurants', function (httpRequest, httpResponse) {
         logger.info("GET /restaurants endpoint called");
         logger.info("Calling restaurantService.getRestaurants() ...");
         restaurantService.getRestaurants(function(response) {
             console.log("############# restaurant.js : " + response);
-            res.json(response);
+            httpResponse.json(response);
         });
     });
     // ##############################
     // ###### HTTP POST method ######
     // ##############################
-    app.post('/restaurants', function (req, res) {
+    app.post('/restaurants', function (httpRequest, httpResponse) {
         logger.info("POST /restaurants endpoint called");
         logger.info("Calling restaurantService.addRestaurant() ...");
-        restaurantService.addRestaurant(req.body, function(response) {
+        restaurantService.addRestaurant(httpRequest.body, function(response) {
             console.log("############# restaurant.js : " + response);
-            res.json(response);
+            httpResponse.json(response);
         });
     });
 };

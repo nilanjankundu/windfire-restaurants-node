@@ -9,17 +9,17 @@ const uri = "mongodb+srv://" + dbUser + ":" + dbPassword + "@" + dbUrl;
 
 function findAll(callback) {
     MongoClient.connect(uri, function(err, db) {
-        console.log("######## Connecting to uri " + uri + "...")
+        console.log("######## Connecting to uri " + uri + "...");
         if (err) 
             throw err;
-        console.log("######## Connecting db " + dbName + " ...")
+        console.log("######## Connecting db " + dbName + " ...");
         var dbo = db.db(dbName);  
-        const query = { name: 'Riviera Caterer' };
-        console.log("######## Querying collection " + collection + " ...")
+        const query = { city: 'Arona' };
+        console.log("######## Querying collection " + collection + " ...");
         dbo.collection(collection).find(query).toArray(function(err, result) {
             if (err) 
                 throw err;
-            console.log("######## Query result ...")
+            console.log("######## Query result ...");
             console.log(result);
             callback(result);
             db.close();
@@ -27,18 +27,20 @@ function findAll(callback) {
     });
 }
 
-function create(restaurant, callback) {
+function create(inputData, callback) {
     MongoClient.connect(uri, function(err, db) {
-        console.log("######## Connecting to uri " + uri + "...")
+        console.log("######## Connecting to uri " + uri + "...");
         if (err) 
             throw err;
-        console.log("######## Connecting db " + dbName + " ...")
+        console.log("######## Connecting db " + dbName + " ...");
         var dbo = db.db(dbName);          
-        console.log("######## Insert into collection " + collection + " ...")
+        console.log("######## Insert into collection " + collection + " ...");
+        var restaurant = {name : inputData.name, city : inputData.city, cuisine : inputData.cuisine, address: {street : inputData.street, zipcode : inputData.zipcode}};
+        console.log("######## Restaurant (stringified) " + JSON.stringify(restaurant));
         dbo.collection(collection).insertOne(restaurant, function(err, result) {
             if (err) 
                 throw err;
-            console.log("######## 1 document inserted ...")
+            console.log("######## 1 document inserted ...");
             console.log(result);
             callback(result);
             db.close();
