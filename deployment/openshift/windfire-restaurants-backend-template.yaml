@@ -44,7 +44,7 @@ objects:
       sourceStrategy:
         from:
           kind: ImageStreamTag
-          name: nodejs:10
+          name: nodejs:12
           namespace: openshift
       type: Source
     triggers:
@@ -103,7 +103,7 @@ objects:
               cpu: 100m
               memory: 256Mi
           ports:
-          - containerPort: 8080
+          - containerPort: 8082
             protocol: TCP
     test: false
     triggers:
@@ -134,8 +134,8 @@ objects:
     name: windfire-restaurants-backend
   spec:
     ports:
-    - name: 8080-tcp
-      port: 8080
+    - name: 8082-tcp
+      port: 8082
       protocol: TCP
       targetPort: 8082
     selector:
@@ -152,7 +152,7 @@ objects:
   spec:
     host: windfire-restaurants-backend.robipozzi-rhocp-588309-3c76f4d12b7fe02f9cab56e64bec3e29-0000.eu-de.containers.appdomain.cloud
     port:
-      targetPort: 8080-tcp
+      targetPort: 8082-tcp
     to:
       kind: Service
       name: windfire-restaurants-backend
