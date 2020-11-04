@@ -1,6 +1,10 @@
 const propertyReader = require('../utils/propertyReader');
 const mongodb = require('mongodb');
 const MongoClient = mongodb.MongoClient;
+const mongodbOptions = {
+    useNewUrlParser: true,
+    useUnifiedTopology: true
+}
 const dbUrl = propertyReader.getProperty('db.url');
 const dbUser = propertyReader.getProperty('db.user');
 const dbPassword = propertyReader.getProperty('db.password');
@@ -10,7 +14,7 @@ const uri = "mongodb+srv://" + dbUser + ":" + dbPassword + "@" + dbUrl;
 
 function findAll(callback) {
     console.log("######## RestaurantDao.findAll called and connecting to uri " + uri + "...");
-    MongoClient.connect(uri, function(err, db) {
+    MongoClient.connect(uri, mongodbOptions, function(err, db) {
         console.log("######## Connecting to uri " + uri + "...");
         if (err) 
             throw err;
@@ -29,7 +33,7 @@ function findAll(callback) {
 }
 
 function create(inputData, callback) {
-    MongoClient.connect(uri, function(err, db) {
+    MongoClient.connect(uri, mongodbOptions, function(err, db) {
         console.log("######## Connecting to uri " + uri + "...");
         if (err) 
             throw err;
@@ -49,7 +53,7 @@ function create(inputData, callback) {
 }
 
 function removeById(id, callback) {
-    MongoClient.connect(uri, function(err, db) {
+    MongoClient.connect(uri, mongodbOptions, function(err, db) {
         console.log("######## Connecting to uri " + uri + "...");
         if (err) 
             throw err;

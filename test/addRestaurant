@@ -4,7 +4,7 @@ content-type: application/json
 {
     "name": "Hostaria Vecchio Portico",
     "city": "Arona",
-    "street": "Piazza del Popolo 23",
-    "zipcode": "20000",
+    "street": "Piazza del Popolo 12",
+    "zipcode": "21013",
     "cuisine": "Italian"
 }
