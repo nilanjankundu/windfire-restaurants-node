@@ -9,6 +9,7 @@ const collection = propertyReader.getProperty('db.collection');
 const uri = "mongodb+srv://" + dbUser + ":" + dbPassword + "@" + dbUrl;
 
 function findAll(callback) {
+    console.log("######## RestaurantDao.findAll called and connecting to uri " + uri + "...");
     MongoClient.connect(uri, function(err, db) {
         console.log("######## Connecting to uri " + uri + "...");
         if (err) 
