@@ -1,6 +1,6 @@
 module.exports = function(app, logger) {
-	app.get('/healthz', function(req, res) {
+	app.get('/healthz', function(httpRequest, httpResponse) {
         logger.info("/healthz endpoint called");
-        res.json({ response : 'App is healthy !!!'});
+        httpResponse.json({ response : 'App is healthy !!!'});
     });
 };

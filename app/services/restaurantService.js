@@ -19,6 +19,12 @@ function addRestaurant(data, callback) {
 	var restaurantDao = require('./restaurantDao');
 	restaurantDao.create(data, callback);
 }
+
+function deleteRestaurant(id, callback) {
+	logger.info("RestaurantService.addRestaurant called");
+	var restaurantDao = require('./restaurantDao');
+	restaurantDao.removeById(id, callback);
+}
 // ####################################
 // ###### Module inner Functions ######
 // ####################################
@@ -119,3 +125,4 @@ function __getFakeRestaurants(callback) {
 
 exports.getRestaurants = getRestaurants;
 exports.addRestaurant = addRestaurant;
+exports.deleteRestaurant = deleteRestaurant;

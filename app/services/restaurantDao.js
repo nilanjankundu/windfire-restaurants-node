@@ -1,5 +1,6 @@
 const propertyReader = require('../utils/propertyReader');
-const MongoClient = require('mongodb').MongoClient;
+const mongodb = require('mongodb');
+const MongoClient = mongodb.MongoClient;
 const dbUrl = propertyReader.getProperty('db.url');
 const dbUser = propertyReader.getProperty('db.user');
 const dbPassword = propertyReader.getProperty('db.password');
@@ -19,8 +20,7 @@ function findAll(callback) {
         dbo.collection(collection).find(query).toArray(function(err, result) {
             if (err) 
                 throw err;
-            console.log("######## Query result ...");
-            console.log(result);
+            console.log("######## Query executed ...");
             callback(result);
             db.close();
         });
@@ -41,7 +41,25 @@ function create(inputData, callback) {
             if (err) 
                 throw err;
             console.log("######## 1 document inserted ...");
-            console.log(result);
+            callback(result);
+            db.close();
+        });
+    });
+}
+
+function removeById(id, callback) {
+    MongoClient.connect(uri, function(err, db) {
+        console.log("######## Connecting to uri " + uri + "...");
+        if (err) 
+            throw err;
+        console.log("######## Connecting db " + dbName + " ...");
+        var dbo = db.db(dbName);          
+        console.log("######## Delete object with id = " + id + " from collection " + collection + " ...");
+        var query = { _id: new mongodb.ObjectID(id) };
+        dbo.collection(collection).deleteOne(query, function(err, result) {
+            if (err) 
+                throw err;
+            console.log("######## 1 document deleted ...");
             callback(result);
             db.close();
         });
@@ -70,4 +88,5 @@ async function queryAsync() {
 
 exports.findAll = findAll;
 exports.create = create;
-exports.queryAsync = queryAsync;
+exports.removeById = removeById;
+//exports.queryAsync = queryAsync;
