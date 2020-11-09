@@ -1,3 +1,12 @@
+- [Before you start](#before-you-start)
+- [Run microservice on local](#reader-prerequisites)
+- [DevOps automation](#installing-and-developing)
+  - [Raspberry deployment architecture](#hello-world)
+  - [AWS architecture](#centralizing-cluster-configuration)
+  - [OpenShift architecture](#sticking-with-the-defaults)
+    - [Jenkins pipeline](#introduction-to-selectors)
+
+
 # Windfire Restaurants Backend (Node.js version)
 This repository holds the code for the backend microservice of my *Windfire Restaurants* management application, along with scripts, playbooks and configurations to automate application run and deployment to target infrastructures.
 
