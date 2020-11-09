@@ -1,18 +1,18 @@
-- [Before you start](#before-you-start)
-- [Run microservice on local](#reader-prerequisites)
-- [DevOps automation](#installing-and-developing)
-  - [Raspberry deployment architecture](#hello-world)
-  - [AWS architecture](#centralizing-cluster-configuration)
-  - [OpenShift architecture](#sticking-with-the-defaults)
-    - [Jenkins pipeline](#introduction-to-selectors)
-
-
 # Windfire Restaurants Backend (Node.js version)
 This repository holds the code for the backend microservice of my *Windfire Restaurants* management application, along with scripts, playbooks and configurations to automate application run and deployment to target infrastructures.
 
 It is a simple microservice, running on Node.js, that serves a basic Hello World html page and exposes 2 REST endpoints:
 * */healthz* endpoint - it returns a string, testing that the application is up and healthy
 * */restaurants* endpoint - it returns a list of restaurants in Json format
+
+## Table of contents
+- [Before you start](#before-you-start)
+- [Run microservice on local](#run-microservice-on-local)
+- [DevOps automation](#devops-automation)
+  - [Raspberry deployment architecture](#raspberry-deployment-architecture)
+  - [AWS architecture](#aws-architecture)
+  - [OpenShift architecture](#openshift-architecture)
+    - [Jenkins pipeline](#jenkins-pipeline)
 
 ## Before you start
 Before starting to use and test this microservice you need to ensure all the prerequisite software is installed:
