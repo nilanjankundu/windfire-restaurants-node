@@ -6,9 +6,7 @@
   - [Raspberry deployment architecture](#raspberry-deployment-architecture)
   - [AWS architecture](#aws-architecture)
   - [OpenShift architecture](#openshift-architecture)
-    - [Jenkins pipeline](#jenkins-pipeline)
-
-PING 
+    - [Jenkins pipeline](#jenkins-pipeline) 
 
 ## Overview
 This repository holds the code for the backend microservice of my *Windfire Restaurants* management application, along with scripts, playbooks and configurations to automate application run and deployment to target infrastructures.
