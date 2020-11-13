@@ -1,6 +1,8 @@
 FROM registry.access.redhat.com/ubi8/nodejs-12
 LABEL author="Roberto Pozzi"
 ENV WORKING_DIR="/opt/app-root/src"
+RUN chgrp -R 0 $WORKING_DIR && \
+    chmod -R g=u $WORKING_DIR
 #RUN yum --disablerepo=* --enablerepo="rhel-7-server-rpms" && \
 #    yum update && \
 #    yum clean all -y
