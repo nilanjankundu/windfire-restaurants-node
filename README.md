@@ -16,9 +16,11 @@ It is a simple microservice, running on Node.js, that serves a basic Hello World
 * */restaurants* endpoint - it returns a list of restaurants in Json format
 
 ## Before you start
-Before starting to use and test this microservice you need to ensure all the prerequisite software is installed:
+Ensure all the prerequisite software is installed:
 * *Node.js* - installation instructions are available for different platforms at *https://nodejs.org/en/download/*. The application has been developed and tested with Node.js v8.11.3.
 * *npm* - Node.js Package Manager is distributed with Node.js, which means that when you download Node.js, you automatically get npm installed on your computer. The application has been developed and tested with npm v5.6.0.
+
+Before starting to use and test this microservice you also need to create **config.properties** file in *app/config* folder and fill it with appropriate parameters value for the desired environment. A placeholder config properties file, named [config_PLACEHOLDER.properties](app/config/config_PLACEHOLDER.properties) is stored in this repo for convenience.
 
 ## Run microservice on local
 This microservice can be run by simply launching **app-run.sh** script, available in the */app* repository sub-folder.

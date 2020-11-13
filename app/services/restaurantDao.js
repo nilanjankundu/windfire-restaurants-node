@@ -1,16 +1,27 @@
 const propertyReader = require('../utils/propertyReader');
 const mongodb = require('mongodb');
+var fs = require('fs');
+// Read the certificate authority
+var ca = [fs.readFileSync(process.cwd() + "/tls/ibmcloud-mongodb")];
+
 const MongoClient = mongodb.MongoClient;
 const mongodbOptions = {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    tlsAllowInvalidCertificates: true,
+    replSet: { 
+        ssl: true,
+        sslValidate:true,
+        checkServerIdentity:false,
+        sslCA: ca
+    }
 }
 const dbUrl = propertyReader.getProperty('db.url');
 const dbUser = propertyReader.getProperty('db.user');
 const dbPassword = propertyReader.getProperty('db.password');
 const dbName = propertyReader.getProperty('db.dbname');
 const collection = propertyReader.getProperty('db.collection');
-const uri = "mongodb+srv://" + dbUser + ":" + dbPassword + "@" + dbUrl;
+const uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=replset&ssl=true";
 
 function findAll(callback) {
     console.log("######## RestaurantDao.findAll called and connecting to uri " + uri + "...");

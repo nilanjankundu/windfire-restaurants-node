@@ -1,3 +1,4 @@
 node_modules/
 deployment/aws/ansible-aws.cfg
 deployment/aws/ansible-ssh.cfg
+app/config/config.properties
