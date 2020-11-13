@@ -2,7 +2,7 @@
 // ###### Add required modules ######
 // ##################################
 var logger = require('../utils/logger');
-var propertyReader = require('../utils/propertyReader');
+var configuration = require('../utils/configuration');
 // ################################
 // ###### Exported Functions ######
 // ################################
@@ -36,11 +36,11 @@ function findRestaurants(callback) {
 function readRestaurantList(callback) {
 	// See https://codeforgeek.com/nodejs-mysql-tutorial/
 	var mysql = require('mysql');
-	var dbUrl = propertyReader.getProperty('db.url');
-	var dbPort = propertyReader.getProperty('db.port');
-	var dbUser = propertyReader.getProperty('db.user');
-	var dbPassword = propertyReader.getProperty('db.password');
-	var dbName = propertyReader.getProperty('db.dbname');
+	var dbUrl = configuration.getProperty('db.url');
+	var dbPort = configuration.getProperty('db.port');
+	var dbUser = configuration.getProperty('db.user');
+	var dbPassword = configuration.getProperty('db.password');
+	var dbName = configuration.getProperty('db.dbname');
 	var dbUser = 'root';
 	var sqlQuery = "SELECT * FROM restaurants";
 	

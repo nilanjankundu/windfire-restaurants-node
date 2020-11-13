@@ -1,4 +1,4 @@
-const propertyReader = require('../utils/propertyReader');
+const configuration = require('../utils/configuration');
 const mongodb = require('mongodb');
 var fs = require('fs');
 // Read the certificate authority
@@ -16,11 +16,11 @@ const mongodbOptions = {
         sslCA: ca
     }
 }
-const dbUrl = propertyReader.getProperty('db.url');
-const dbUser = propertyReader.getProperty('db.user');
-const dbPassword = propertyReader.getProperty('db.password');
-const dbName = propertyReader.getProperty('db.dbname');
-const collection = propertyReader.getProperty('db.collection');
+const dbUrl = process.env.DB_URL || configuration.getProperty('db.url');
+const dbUser = process.env.DB_USER || configuration.getProperty('db.user');
+const dbPassword = process.env.DB_PASSWORD || configuration.getProperty('db.password');
+const dbName = process.env.DB_NAME || configuration.getProperty('db.name');
+const collection = process.env.DB_COLLECTION || configuration.getProperty('db.collection');
 const uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=replset&ssl=true";
 
 function findAll(callback) {
