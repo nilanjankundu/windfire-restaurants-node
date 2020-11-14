@@ -27,7 +27,8 @@ const mongodbOptions = {
 
 function initConfig() {
     console.log("######## RestaurantDao.initConfig called ...");
-    dbSecret = process.env.DB_SECRET || configuration.getProperty('db.secret');
+    //dbSecret = process.env.DB_SECRET || configuration.getProperty('db.secret');
+    const dbSecret = process.env.binding-mongodb-demo;
     console.log("######## RestaurantDao.initConfig - dbSecret = " + dbSecret);
     if (false) {
         console.log("######## RestaurantDao.initConfig - reading configuration from secret ... ");
