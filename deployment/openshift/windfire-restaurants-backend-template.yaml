@@ -88,6 +88,11 @@ objects:
         - name: windfire-restaurants-backend
           image: windfire-restaurants-backend:latest
           env:
+            - name: DB_SECRET
+              valueFrom:
+                  secretKeyRef:
+                    name: ${DB_SECRET}
+                    key: connection
             - name: DB_URL
               value: ${DB_URL}
             - name: DB_USER
