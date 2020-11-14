@@ -29,7 +29,12 @@ function initConfig() {
     console.log("######## RestaurantDao.initConfig called ...");
     //dbSecret = process.env.DB_SECRET || configuration.getProperty('db.secret');
     const dbSecret = process.env.DB_SECRET;
-    console.log("######## RestaurantDao.initConfig - dbSecret = " + dbSecret);
+    console.log("######## RestaurantDao.initConfig - process.env.DB_SECRET = " + dbSecret);
+    console.log("######## RestaurantDao.initConfig - process.env.DB_URL = " + process.env.DB_URL);
+    console.log("######## RestaurantDao.initConfig - process.env.DB_USER = " + process.env.DB_USER);
+    console.log("######## RestaurantDao.initConfig - process.env.DB_PASSWORD = " + process.env.DB_PASSWORD);
+    console.log("######## RestaurantDao.initConfig - process.env.DB_NAME = " + process.env.DB_NAME);
+    console.log("######## RestaurantDao.initConfig - process.env.DB_COLLECTION = " + process.env.DB_COLLECTION);
     if (false) {
         console.log("######## RestaurantDao.initConfig - reading configuration from secret ... ");
     } else {
