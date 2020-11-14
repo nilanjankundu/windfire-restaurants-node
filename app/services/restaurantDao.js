@@ -1,9 +1,17 @@
+// Module initialization
 const configuration = require('../utils/configuration');
 const mongodb = require('mongodb');
-var fs = require('fs');
+const fs = require('fs');
+// Variable declarations
+let dbUrl // = process.env.DB_URL || configuration.getProperty('db.url');
+let dbUser // = process.env.DB_USER || configuration.getProperty('db.user');
+let dbPassword //= process.env.DB_PASSWORD || configuration.getProperty('db.password');
+let dbName //= process.env.DB_NAME || configuration.getProperty('db.name');
+let collection //= process.env.DB_COLLECTION || configuration.getProperty('db.collection');
+let uri //= "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=replset&ssl=true";
 // Read the certificate authority
 var ca = [fs.readFileSync(process.cwd() + "/tls/ibmcloud-mongodb")];
-
+// Declare Mongo Client with connection options
 const MongoClient = mongodb.MongoClient;
 const mongodbOptions = {
     useNewUrlParser: true,
@@ -16,14 +24,25 @@ const mongodbOptions = {
         sslCA: ca
     }
 }
-const dbUrl = process.env.DB_URL || configuration.getProperty('db.url');
-const dbUser = process.env.DB_USER || configuration.getProperty('db.user');
-const dbPassword = process.env.DB_PASSWORD || configuration.getProperty('db.password');
-const dbName = process.env.DB_NAME || configuration.getProperty('db.name');
-const collection = process.env.DB_COLLECTION || configuration.getProperty('db.collection');
-const uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=replset&ssl=true";
 
+function initConfig() {
+    console.log("######## RestaurantDao.initConfig called ...");
+    dbSecret = process.env.DB_SECRET || configuration.getProperty('db.secret');
+    console.log("######## RestaurantDao.initConfig - dbSecret = " + dbSecret);
+    if (false) {
+        console.log("######## RestaurantDao.initConfig - reading configuration from secret ... ");
+    } else {
+        dbUrl = process.env.DB_URL || configuration.getProperty('db.url');
+        dbUser = process.env.DB_USER || configuration.getProperty('db.user');
+        dbPassword = process.env.DB_PASSWORD || configuration.getProperty('db.password');
+        dbName = process.env.DB_NAME || configuration.getProperty('db.name');
+        collection = process.env.DB_COLLECTION || configuration.getProperty('db.collection');
+        uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=replset&ssl=true";
+    }
+    console.log("######## RestaurantDao.config called and connecting to uri " + uri + " ...");
+}
 function findAll(callback) {
+    initConfig();
     console.log("######## RestaurantDao.findAll called and connecting to uri " + uri + "...");
     MongoClient.connect(uri, mongodbOptions, function(err, db) {
         console.log("######## Connecting to uri " + uri + "...");
