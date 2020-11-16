@@ -33,11 +33,13 @@ function initConfig() {
         // Get database connection configuration from a Secret
         console.log("######## RestaurantDao.initConfig - parsing secret for Database connection configuration ... ");
         const env = JSON.parse(dbSecret);
-        console.log("######## RestaurantDao.initConfig - env = " + env);
+        console.log("######## RestaurantDao.initConfig - env = " + JSON.stringify(env));
         const mongodb = env.mongodb;
+        console.log("######## RestaurantDao.initConfig - mongodb = " + JSON.stringify(mongodb));
         const uriObj = mongodb.composed;
-        uri = JSON.stringify();
+        uri = JSON.stringify(uriObj);
         console.log("######## RestaurantDao.initConfig - uri (parsed from secret) = " + uri);
+        // parse service binding
     } else { 
         // No Secret found, get database connection configuration from environment variables
         // If no environment variables are defined, try get database connection configuration from config file

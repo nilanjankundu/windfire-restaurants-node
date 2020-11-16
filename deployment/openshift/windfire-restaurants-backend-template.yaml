@@ -93,7 +93,6 @@ objects:
                   secretKeyRef:
                     name: ${DB_SECRET}
                     key: binding
-            # parse service binding
             #- name: DB_URL
             #  value: ${DB_URL}
             #- name: DB_USER
