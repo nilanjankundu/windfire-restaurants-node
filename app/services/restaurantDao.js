@@ -35,13 +35,13 @@ function initConfig() {
         console.log("######## RestaurantDao.initConfig - parsing secret for Database connection configuration ... ");
         const env = JSON.parse(dbSecret);
         console.log("######## RestaurantDao.initConfig - env = " + JSON.stringify(env));
-        const connection = env.connection;
-        console.log("######## RestaurantDao.initConfig - connection = " + JSON.stringify(connection));
-        const mongodb = connection.mongodb;
+        /*const connection = env.connection;
+        console.log("######## RestaurantDao.initConfig - connection = " + JSON.stringify(connection));*/
+        const mongodb = env.connection.mongodb;
         console.log("######## RestaurantDao.initConfig - mongodb = " + JSON.stringify(mongodb));
         const uriObj = mongodb.composed[0];
-        const uriParsed = JSON.stringify(uriObj);
-        console.log("######## RestaurantDao.initConfig - uri (parsed from secret) = " + uriParsed);
+        uri = JSON.stringify(uriObj);
+        console.log("######## RestaurantDao.initConfig - uri (parsed from secret) = " + uri);
         // mongodb://ibm_cloud_14b30c86_fa14_4362_8ee5_6ffe7fbc2535:5fba5aa7ba1b3fe9c7d3605d1748ee073a71396717b49bab368ed7e95844f3f3@b70bf512-88b2-45ef-a63c-80970b486146-0.659dc287bad647f9b4fe17c4e4c38dcc.databases.appdomain.cloud:31554,b70bf512-88b2-45ef-a63c-80970b486146-1.659dc287bad647f9b4fe17c4e4c38dcc.databases.appdomain.cloud:31554,b70bf512-88b2-45ef-a63c-80970b486146-2.659dc287bad647f9b4fe17c4e4c38dcc.databases.appdomain.cloud:31554/ibmclouddb?authSource=admin&replicaSet=replset
         const authentication = mongodb.authentication;
         const hosts = mongodb.hosts;
@@ -58,13 +58,13 @@ function initConfig() {
         // No Secret found, get database connection configuration from environment variables
         // If no environment variables are defined, try get database connection configuration from config file
         dbUrl = process.env.DB_URL || configuration.getProperty('db.url');
+        replicaSet = "replset";
         dbUser = process.env.DB_USER || configuration.getProperty('db.user');
         dbPassword = process.env.DB_PASSWORD || configuration.getProperty('db.password');
-        dbName = process.env.DB_NAME || configuration.getProperty('db.name');
-        collection = process.env.DB_COLLECTION || configuration.getProperty('db.collection');
-        replicaSet = "replset";
+        uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=" + replicaSet + "&ssl=true";
     }
-    uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=" + replicaSet + "&ssl=true";
+    dbName = process.env.DB_NAME || configuration.getProperty('db.name');
+    collection = process.env.DB_COLLECTION || configuration.getProperty('db.collection');
     console.log("######## RestaurantDao.config called, will connect to uri " + uri + " ...");
 }
 function findAll(callback) {
