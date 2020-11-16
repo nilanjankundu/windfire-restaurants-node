@@ -181,15 +181,6 @@ parameters:
   - name: DB_SECRET
     required: true
     value: binding-mongodb-demo
-  - name: DB_URL
-    required: true
-    value: b70bf512-88b2-45ef-a63c-80970b486146-0.659dc287bad647f9b4fe17c4e4c38dcc.databases.appdomain.cloud:31554
-  - name: DB_USER
-    required: true
-    value: admin
-  - name: DB_PASSWORD
-    required: true
-    value: S1m0R0b12020
   - name: DB_NAME
     required: true
     value: restaurants
