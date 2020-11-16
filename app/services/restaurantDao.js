@@ -34,7 +34,9 @@ function initConfig() {
         console.log("######## RestaurantDao.initConfig - parsing secret for Database connection configuration ... ");
         const env = JSON.parse(dbSecret);
         console.log("######## RestaurantDao.initConfig - env = " + JSON.stringify(env));
-        const mongodb = env.mongodb;
+        const connection = env.connection;
+        console.log("######## RestaurantDao.initConfig - connection = " + JSON.stringify(connection));
+        const mongodb = connection.mongodb;
         console.log("######## RestaurantDao.initConfig - mongodb = " + JSON.stringify(mongodb));
         const uriObj = mongodb.composed;
         uri = JSON.stringify(uriObj);
