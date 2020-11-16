@@ -27,17 +27,16 @@ const mongodbOptions = {
 
 function initConfig() {
     console.log("######## RestaurantDao.initConfig called ...");
-    //dbSecret = process.env.DB_SECRET || configuration.getProperty('db.secret');
     const dbSecret = process.env.DB_SECRET;
     console.log("######## RestaurantDao.initConfig - process.env.DB_SECRET = " + dbSecret);
-    console.log("######## RestaurantDao.initConfig - process.env.DB_URL = " + process.env.DB_URL);
-    console.log("######## RestaurantDao.initConfig - process.env.DB_USER = " + process.env.DB_USER);
-    console.log("######## RestaurantDao.initConfig - process.env.DB_PASSWORD = " + process.env.DB_PASSWORD);
-    console.log("######## RestaurantDao.initConfig - process.env.DB_NAME = " + process.env.DB_NAME);
-    console.log("######## RestaurantDao.initConfig - process.env.DB_COLLECTION = " + process.env.DB_COLLECTION);
-    if (false) {
-        console.log("######## RestaurantDao.initConfig - reading configuration from secret ... ");
-    } else {
+    if (dbSecret != undefined) {
+        // Get database connection configuration from a Secret
+        console.log("######## RestaurantDao.initConfig - parsing secret for Database connection configuration ... ");
+        const env = JSON.parse(dbSecret);
+        console.log("######## RestaurantDao.initConfig - env = " + env);
+    } else { 
+        // No Secret found, get database connection configuration from environment variables
+        // If no environment variables are defined, try get database connection configuration from config file
         dbUrl = process.env.DB_URL || configuration.getProperty('db.url');
         dbUser = process.env.DB_USER || configuration.getProperty('db.user');
         dbPassword = process.env.DB_PASSWORD || configuration.getProperty('db.password');
