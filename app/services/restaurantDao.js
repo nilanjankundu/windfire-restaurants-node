@@ -2,6 +2,7 @@
 const configuration = require('../utils/configuration');
 const mongodb = require('mongodb');
 const fs = require('fs');
+var logger = require('../utils/logger');
 // Variable declarations
 let dbUrl // = process.env.DB_URL || configuration.getProperty('db.url');
 let dbUser // = process.env.DB_USER || configuration.getProperty('db.user');
@@ -27,61 +28,60 @@ const mongodbOptions = {
 }
 
 function initConfig() {
-    console.log("######## RestaurantDao.initConfig called ...");
+    logger.info("######## RestaurantDao.initConfig called ...");
     const dbSecret = process.env.DB_SECRET;
-    console.log("######## RestaurantDao.initConfig - process.env.DB_SECRET = " + dbSecret);
+    logger.info("######## RestaurantDao.initConfig - process.env.DB_SECRET = " + dbSecret);
     if (dbSecret != undefined) {
         // Get database connection configuration from a Secret
-        console.log("######## RestaurantDao.initConfig - parsing secret for Database connection configuration ... ");
-        const env = JSON.parse(dbSecret);
-        console.log("######## RestaurantDao.initConfig - env = " + JSON.stringify(env));
+        logger.info("######## RestaurantDao.initConfig - parsing secret for Database connection configuration ... ");
+        /*const env = JSON.parse(dbSecret);
+        logger.info("######## RestaurantDao.initConfig - env = " + JSON.stringify(env));*/
         /*const connection = env.connection;
-        console.log("######## RestaurantDao.initConfig - connection = " + JSON.stringify(connection));*/
-        const mongodb = env.connection.mongodb;
-        console.log("######## RestaurantDao.initConfig - mongodb = " + JSON.stringify(mongodb));
-        const uriObj = mongodb.composed[0];
-        uri = JSON.stringify(uriObj);
-        console.log("######## RestaurantDao.initConfig - uri (parsed from secret) = " + uri);
-        // mongodb://ibm_cloud_14b30c86_fa14_4362_8ee5_6ffe7fbc2535:5fba5aa7ba1b3fe9c7d3605d1748ee073a71396717b49bab368ed7e95844f3f3@b70bf512-88b2-45ef-a63c-80970b486146-0.659dc287bad647f9b4fe17c4e4c38dcc.databases.appdomain.cloud:31554,b70bf512-88b2-45ef-a63c-80970b486146-1.659dc287bad647f9b4fe17c4e4c38dcc.databases.appdomain.cloud:31554,b70bf512-88b2-45ef-a63c-80970b486146-2.659dc287bad647f9b4fe17c4e4c38dcc.databases.appdomain.cloud:31554/ibmclouddb?authSource=admin&replicaSet=replset
-        const authentication = mongodb.authentication;
-        const hosts = mongodb.hosts;
+        logger.info("######## RestaurantDao.initConfig - connection = " + JSON.stringify(connection));*/
+        const mongodb = JSON.parse(dbSecret).connection.mongodb;
+        //const authentication = mongodb.authentication;
+        logger.info("######## RestaurantDao.initConfig - mongodb = " + JSON.stringify(mongodb));
+        //const uriObj = mongodb.composed[0];
+        uri = JSON.stringify(mongodb.composed[0]);
+        logger.info("######## RestaurantDao.initConfig - uri (parsed from secret) = " + uri);
+        /*const hosts = mongodb.hosts;
         dbUrl = hosts[0].hostname + ":" + hosts[0].port;
-        console.log("######## RestaurantDao.initConfig - dbUrl = " + dbUrl);
+        logger.info("######## RestaurantDao.initConfig - dbUrl = " + dbUrl);
         dbUser = authentication.username;
-        console.log("######## RestaurantDao.initConfig - dbUser = " + dbUser);
+        logger.info("######## RestaurantDao.initConfig - dbUser = " + dbUser);
         dbPassword = authentication.password;
-        console.log("######## RestaurantDao.initConfig - dbPassword = " + dbPassword);
-        replicaSet = mongodb.replica_set;
-        console.log("######## RestaurantDao.initConfig - replicaSet = " + replicaSet);
+        logger.info("######## RestaurantDao.initConfig - dbPassword = " + dbPassword);*/
+        /*replicaSet = mongodb.replica_set;
+        logger.info("######## RestaurantDao.initConfig - replicaSet = " + replicaSet);*/
         // parse service binding
     } else { 
         // No Secret found, get database connection configuration from environment variables
         // If no environment variables are defined, try get database connection configuration from config file
         dbUrl = process.env.DB_URL || configuration.getProperty('db.url');
-        replicaSet = "replset";
+        replicaSet = process.env.DB_REPLICASET || configuration.getProperty('db.replicaset');
         dbUser = process.env.DB_USER || configuration.getProperty('db.user');
         dbPassword = process.env.DB_PASSWORD || configuration.getProperty('db.password');
         uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=" + replicaSet + "&ssl=true";
     }
     dbName = process.env.DB_NAME || configuration.getProperty('db.name');
     collection = process.env.DB_COLLECTION || configuration.getProperty('db.collection');
-    console.log("######## RestaurantDao.config called, will connect to uri " + uri + " ...");
+    logger.info("######## RestaurantDao.config called, will connect to uri " + uri + " ...");
 }
 function findAll(callback) {
     initConfig();
-    console.log("######## RestaurantDao.findAll called and connecting to uri " + uri + "...");
+    logger.info("######## RestaurantDao.findAll called and connecting to uri " + uri + "...");
     MongoClient.connect(uri, mongodbOptions, function(err, db) {
-        console.log("######## Connecting to uri " + uri + "...");
+        logger.info("######## Connecting to uri " + uri + "...");
         if (err) 
             throw err;
-        console.log("######## Connecting db " + dbName + " ...");
+        logger.info("######## Connecting db " + dbName + " ...");
         var dbo = db.db(dbName);  
         const query = { city: 'Arona' };
-        console.log("######## Querying collection " + collection + " ...");
+        logger.info("######## Querying collection " + collection + " ...");
         dbo.collection(collection).find(query).toArray(function(err, result) {
             if (err) 
                 throw err;
-            console.log("######## Query executed ...");
+            logger.info("######## Query executed ...");
             callback(result);
             db.close();
         });
@@ -90,18 +90,18 @@ function findAll(callback) {
 
 function create(inputData, callback) {
     MongoClient.connect(uri, mongodbOptions, function(err, db) {
-        console.log("######## Connecting to uri " + uri + "...");
+        logger.info("######## Connecting to uri " + uri + "...");
         if (err) 
             throw err;
-        console.log("######## Connecting db " + dbName + " ...");
+        logger.info("######## Connecting db " + dbName + " ...");
         var dbo = db.db(dbName);          
-        console.log("######## Insert into collection " + collection + " ...");
+        logger.info("######## Insert into collection " + collection + " ...");
         var restaurant = {name : inputData.name, city : inputData.city, cuisine : inputData.cuisine, address: {street : inputData.street, zipcode : inputData.zipcode}};
-        console.log("######## Restaurant (stringified) " + JSON.stringify(restaurant));
+        logger.info("######## Restaurant (stringified) " + JSON.stringify(restaurant));
         dbo.collection(collection).insertOne(restaurant, function(err, result) {
             if (err) 
                 throw err;
-            console.log("######## 1 document inserted ...");
+            logger.info("######## 1 document inserted ...");
             callback(result);
             db.close();
         });
@@ -110,17 +110,17 @@ function create(inputData, callback) {
 
 function removeById(id, callback) {
     MongoClient.connect(uri, mongodbOptions, function(err, db) {
-        console.log("######## Connecting to uri " + uri + "...");
+        logger.info("######## Connecting to uri " + uri + "...");
         if (err) 
             throw err;
-        console.log("######## Connecting db " + dbName + " ...");
+        logger.info("######## Connecting db " + dbName + " ...");
         var dbo = db.db(dbName);          
-        console.log("######## Delete object with id = " + id + " from collection " + collection + " ...");
+        logger.info("######## Delete object with id = " + id + " from collection " + collection + " ...");
         var query = { _id: new mongodb.ObjectID(id) };
         dbo.collection(collection).deleteOne(query, function(err, result) {
             if (err) 
                 throw err;
-            console.log("######## 1 document deleted ...");
+            logger.info("######## 1 document deleted ...");
             callback(result);
             db.close();
         });
@@ -137,7 +137,7 @@ async function queryAsync() {
         const query = { title: 'Back to the Future' };
         const movie = await collection.findOne(query);
         //const movie = await collection.find();
-        console.log(movie);
+        logger.info(movie);
         //return movie
     } finally {
         // Ensures that the client will close when you finish/error
