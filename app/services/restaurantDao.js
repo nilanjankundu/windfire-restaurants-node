@@ -8,6 +8,7 @@ let dbUser // = process.env.DB_USER || configuration.getProperty('db.user');
 let dbPassword //= process.env.DB_PASSWORD || configuration.getProperty('db.password');
 let dbName //= process.env.DB_NAME || configuration.getProperty('db.name');
 let collection //= process.env.DB_COLLECTION || configuration.getProperty('db.collection');
+let replicaSet //= process.env.DB_COLLECTION || configuration.getProperty('db.collection');
 let uri //= "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=replset&ssl=true";
 // Read the certificate authority
 var ca = [fs.readFileSync(process.cwd() + "/tls/ibmcloud-mongodb")];
@@ -39,8 +40,15 @@ function initConfig() {
         const mongodb = connection.mongodb;
         console.log("######## RestaurantDao.initConfig - mongodb = " + JSON.stringify(mongodb));
         const uriObj = mongodb.composed[0];
-        uri = JSON.stringify(uriObj);
-        console.log("######## RestaurantDao.initConfig - uri (parsed from secret) = " + uri);
+        const uriParsed = JSON.stringify(uriObj);
+        console.log("######## RestaurantDao.initConfig - uri (parsed from secret) = " + uriParsed);
+        // mongodb://ibm_cloud_14b30c86_fa14_4362_8ee5_6ffe7fbc2535:5fba5aa7ba1b3fe9c7d3605d1748ee073a71396717b49bab368ed7e95844f3f3@b70bf512-88b2-45ef-a63c-80970b486146-0.659dc287bad647f9b4fe17c4e4c38dcc.databases.appdomain.cloud:31554,b70bf512-88b2-45ef-a63c-80970b486146-1.659dc287bad647f9b4fe17c4e4c38dcc.databases.appdomain.cloud:31554,b70bf512-88b2-45ef-a63c-80970b486146-2.659dc287bad647f9b4fe17c4e4c38dcc.databases.appdomain.cloud:31554/ibmclouddb?authSource=admin&replicaSet=replset
+        const authentication = mongodb.authentication;
+        const hosts = mongodb.hosts;
+        dbUrl = hosts[0].hostname + ":" + hosts[0].port;
+        dbUser = authentication.username;
+        dbPassword = authentication.password;
+        replicaSet = connection.replica_set;
         // parse service binding
     } else { 
         // No Secret found, get database connection configuration from environment variables
@@ -50,9 +58,10 @@ function initConfig() {
         dbPassword = process.env.DB_PASSWORD || configuration.getProperty('db.password');
         dbName = process.env.DB_NAME || configuration.getProperty('db.name');
         collection = process.env.DB_COLLECTION || configuration.getProperty('db.collection');
-        uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=replset&ssl=true";
+        replicaSet = "replset";
     }
-    console.log("######## RestaurantDao.config called and connecting to uri " + uri + " ...");
+    uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=" + replica_set + "&ssl=true";
+    console.log("######## RestaurantDao.config called, will connect to uri " + uri + " ...");
 }
 function findAll(callback) {
     initConfig();
