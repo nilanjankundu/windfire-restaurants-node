@@ -48,7 +48,7 @@ function initConfig() {
         dbUrl = hosts[0].hostname + ":" + hosts[0].port;
         dbUser = authentication.username;
         dbPassword = authentication.password;
-        replicaSet = connection.replica_set;
+        replicaSet = mongodb.replica_set;
         // parse service binding
     } else { 
         // No Secret found, get database connection configuration from environment variables
