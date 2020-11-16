@@ -38,7 +38,7 @@ function initConfig() {
         console.log("######## RestaurantDao.initConfig - connection = " + JSON.stringify(connection));
         const mongodb = connection.mongodb;
         console.log("######## RestaurantDao.initConfig - mongodb = " + JSON.stringify(mongodb));
-        const uriObj = mongodb.composed;
+        const uriObj = mongodb.composed[0];
         uri = JSON.stringify(uriObj);
         console.log("######## RestaurantDao.initConfig - uri (parsed from secret) = " + uri);
         // parse service binding
