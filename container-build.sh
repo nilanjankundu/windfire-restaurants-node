@@ -4,7 +4,7 @@ echo ${cyn}Removing $CONTAINER_IMAGE_NAME:$CONTAINER_IMAGE_VERSION image ...${en
 docker rmi -f $CONTAINER_IMAGE_NAME:$CONTAINER_IMAGE_VERSION
 echo ${cyn}Container image removed${end}
 echo ${cyn}Removing $DOCKER_HUB_ID/$CONTAINER_IMAGE_NAME:$CONTAINER_IMAGE_VERSION image ...${end}
-docker rmi -f $DOCKER_HUB_ID$CONTAINER_IMAGE_NAME:$CONTAINER_IMAGE_VERSION
+docker rmi -f $DOCKER_HUB_ID/$CONTAINER_IMAGE_NAME:$CONTAINER_IMAGE_VERSION
 echo ${cyn}Container image removed${end}
 echo
 echo ${cyn}Building $CONTAINER_IMAGE_NAME:$CONTAINER_IMAGE_VERSION image ...${end}
