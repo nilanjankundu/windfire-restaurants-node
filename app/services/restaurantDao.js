@@ -46,9 +46,13 @@ function initConfig() {
         const authentication = mongodb.authentication;
         const hosts = mongodb.hosts;
         dbUrl = hosts[0].hostname + ":" + hosts[0].port;
+        console.log("######## RestaurantDao.initConfig - dbUrl = " + dbUrl);
         dbUser = authentication.username;
+        console.log("######## RestaurantDao.initConfig - dbUser = " + dbUser);
         dbPassword = authentication.password;
+        console.log("######## RestaurantDao.initConfig - dbPassword = " + dbPassword);
         replicaSet = mongodb.replica_set;
+        console.log("######## RestaurantDao.initConfig - replicaSet = " + replicaSet);
         // parse service binding
     } else { 
         // No Secret found, get database connection configuration from environment variables
@@ -60,7 +64,7 @@ function initConfig() {
         collection = process.env.DB_COLLECTION || configuration.getProperty('db.collection');
         replicaSet = "replset";
     }
-    uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=" + replica_set + "&ssl=true";
+    uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=" + replicaSet + "&ssl=true";
     console.log("######## RestaurantDao.config called, will connect to uri " + uri + " ...");
 }
 function findAll(callback) {
