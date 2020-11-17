@@ -60,9 +60,8 @@ function findAll(callback) {
             throw err;
         logger.info("######## Connecting db " + dbName + " ...");
         var dbo = db.db(dbName);  
-        const query = { city: 'Arona' };
         logger.info("######## Querying collection " + collection + " ...");
-        dbo.collection(collection).find(query).toArray(function(err, result) {
+        dbo.collection(collection).find().toArray(function(err, result) {
             if (err) 
                 throw err;
             logger.info("######## Query executed ...");
