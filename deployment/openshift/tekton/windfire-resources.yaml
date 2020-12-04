@@ -1,0 +1,22 @@
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: windfire-restaurants-node-git
+spec:
+  type: git
+  params:
+    - name: url
+      value: 'https://github.com/robipozzi/windfire-restaurants-node'
+    - name: revision
+      value: master
+---
+apiVersion: tekton.dev/v1alpha1
+kind: PipelineResource
+metadata:
+  name: windfire-restaurants-node-image
+spec:
+  type: image
+  params:
+    - name: url
+      value: >-
+        image-registry.openshift-image-registry.svc:5000/windfire/windfire-restaurants-node:2.0

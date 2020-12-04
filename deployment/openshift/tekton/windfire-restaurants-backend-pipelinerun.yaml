@@ -1,0 +1,18 @@
+apiVersion: tekton.dev/v1beta1 
+kind: PipelineRun 
+metadata:
+  name: windfire-restaurants-backend-pipelinerun 
+spec:
+  pipelineRef:
+    name: windfire-restaurants-backend-build-and-deploy
+  params: 
+  - name: deployment-name
+    value: windfire-restaurants-backend
+  - name: git-url
+    value: https://github.com/robipozzi/windfire-restaurants-node
+  - name: IMAGE
+    value: image-registry.openshift-image-registry.svc:5000/windfire/windfire-restaurants-node:2.0
+  workspaces: 
+  - name: windfire-backend-workspace
+    persistentVolumeClaim:
+      claimName: mypvc
