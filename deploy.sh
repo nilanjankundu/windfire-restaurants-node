@@ -45,9 +45,18 @@ deployToAWS()
 
 deployToOpenShift()
 {
-	## Deploy Windfire Restaurants backend component to Red Hat OpenShift
+	## Deploy Windfire Restaurants backend component to Red Hat OpenShift using Jenkins pipeline
     echo ${cyn}Deploy Windfire Restaurants backend component to Red Hat OpenShift ...${end}
-    deployment/openshift/deploy.sh
+    deployment/openshift/jenkins/deploy.sh
+    echo ${cyn}Done${end}
+    echo
+}
+
+runOpenShiftPipeline()
+{
+	## Deploy Windfire Restaurants backend component to Red Hat OpenShift using OpenShift pipeline
+    echo ${cyn}Deploy Windfire Restaurants backend component to Red Hat OpenShift ...${end}
+    deployment/openshift/tekton/deploy.sh
     echo ${cyn}Done${end}
     echo
 }
@@ -79,7 +88,8 @@ printSelectPlatform()
     echo "${grn}1. Raspberry${end}"
     echo "${grn}2. AWS Single Zone${end}"
     echo "${grn}3. AWS Multi Zone${end}"
-    echo "${grn}4. OpenShift${end}"
+    echo "${grn}4. OpenShift (using Jenkins)${end}"
+    #echo "${grn}5. OpenShift (using OpenShift Pipelines)${end}"
 	read PLATFORM_OPTION
 	setDeployFunction
 }
@@ -94,6 +104,8 @@ setDeployFunction()
         3)  DEPLOY_FUNCTION="deployToAWS"
             ;;
         4)  DEPLOY_FUNCTION="deployToOpenShift"
+            ;;
+        5)  DEPLOY_FUNCTION="runOpenShiftPipeline"
             ;;
 		*) 	printf "\n${red}No valid option selected${end}\n"
 			printSelectPlatform

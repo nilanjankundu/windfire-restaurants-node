@@ -6,7 +6,8 @@
   - [Raspberry deployment architecture](#raspberry-deployment-architecture)
   - [AWS architecture](#aws-architecture)
   - [OpenShift architecture](#openshift-architecture)
-    - [Jenkins pipeline](#jenkins-pipeline) 
+    - [Jenkins pipeline](#jenkins-pipeline)
+    - [OpenShift pipeline](#openshift-pipeline)
 
 ## Overview
 This repository holds the code for the backend microservice of my *Windfire Restaurants* management application, along with scripts, playbooks and configurations to automate application run and deployment to target infrastructures.
@@ -85,7 +86,7 @@ In case of deployment to OpenShift, **deploy.sh** delegates to [deployment/opens
 * *Route* that exposes the Service outside the OpenShift cluster
 
 #### Jenkins pipeline
-A BuildConfig definition of type JenkinsPipeline is also available at [deployment/openshift/buildconfig.yaml](deployment/openshift/buildconfig.yaml) to allow using Jenkins to automate build and deployment to OpenShift; the BuildConfig then delegates the build and deployment steps to [Jenkinsfile](Jenkinsfile)
+A BuildConfig definition of type JenkinsPipeline is also available at [deployment/openshift/jenkins/buildconfig.yaml](deployment/openshift/jenkins/buildconfig.yaml) to allow using Jenkins to automate build and deployment to OpenShift; the BuildConfig then delegates the build and deployment steps to [Jenkinsfile](Jenkinsfile)
 
 #### OpenShift pipeline
 An implementation of build and deployment procedure with OpenShift Pipelines (based on Tekton) is ongoing and will be delivered soon.
