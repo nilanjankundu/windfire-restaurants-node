@@ -40,7 +40,7 @@ The scripts currently expose 4 deployment/undeployment options:
 ### Raspberry deployment architecture
 Automation is implemented using Ansible technology (https://www.ansible.com/): refer to Ansible technical documentation (https://docs.ansible.com/) for detailed instructions regarding installation and setup.
 
-A file, named **[ansible.cfg](deployment/raspberry/ansible.cfg)**, is provided to set basic configurations needed to run Ansible: **[deploy.sh](deploy.sh)** and **[undeploy.sh](undeploy.sh)** scripts set ANSIBLE_CONFIG environment variable pointing to this file; the basic configuration you should have is something like this:
+A file, named **[ansible.cfg](deployment/raspberry/ansible.cfg)**, is provided in *raspberry* folder to set basic configurations needed to run Ansible: **[deploy.sh](deploy.sh)** and **[undeploy.sh](undeploy.sh)** scripts set ANSIBLE_CONFIG environment variable pointing to this file; the basic configuration you should have is something like this:
 
 ![](images/ansible-config.png)
 where:
