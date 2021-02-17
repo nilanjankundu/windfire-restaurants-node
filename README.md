@@ -7,7 +7,7 @@
   - [AWS architecture](#aws-architecture)
   - [OpenShift architecture](#openshift-architecture)
     - [Jenkins pipeline](#jenkins-pipeline)
-    - [OpenShift pipeline](#openshift-pipeline)
+    - [OpenShift pipeline (work in progress)](#openshift-pipeline)
 
 ## Overview
 This repository contains the code for the backend microservice of my *Windfire Restaurants* application, along with scripts, playbooks and configurations to automate application run and deployment to target infrastructures.
@@ -40,7 +40,7 @@ The scripts currently expose 4 deployment/undeployment options:
 ### Raspberry deployment architecture
 Automation is implemented using Ansible technology (https://www.ansible.com/): refer to Ansible technical documentation (https://docs.ansible.com/) for detailed instructions regarding installation and setup.
 
-A file, named **[ansible.cfg](deployment/raspberry/ansible.cfg)**, is provided in *raspberry* folder to set basic configurations needed to run Ansible: **[deploy.sh](deploy.sh)** and **[undeploy.sh](undeploy.sh)** scripts set ANSIBLE_CONFIG environment variable pointing to this file; the basic configuration you should have is something like this:
+A file, named **[ansible.cfg](deployment/raspberry/ansible.cfg)**, is provided in *deployment/raspberry* folder to set basic configurations needed to run Ansible: **[deploy.sh](deploy.sh)** and **[undeploy.sh](undeploy.sh)** scripts set ANSIBLE_CONFIG environment variable pointing to this file; the basic configuration you should have is something like this:
 
 ![](images/ansible-config.png)
 where:
@@ -62,7 +62,7 @@ AWS target deployment environment is based on the following Architecture
 
 For security reasons, either the Frontend and Backend subnets are not directly accessible via SSH. Ansible automation script is configured to connect to the target hosts via a Bastion Host, conveniently placed in the Management subnet.
 
-In case of deployment to AWS, since the Cloud architecture is more dynamic by nature, the **[deploy.sh](deploy.sh)** and **[undeploy.sh](undeploy.sh)** scripts delegate to **[ansible-config.sh](deployment/aws/ansible-config.sh)** script the dynamic definition of 2 files that are used by Ansible:
+In case of deployment to AWS, since the Cloud architecture is more dynamic by nature, the **[deploy.sh](deploy.sh)** and **[undeploy.sh](undeploy.sh)** scripts delegate to **[ansible-config.sh](deployment/aws/ansible-config.sh)** script in *deployment/aws* folder the dynamic definition of 2 files that are used by Ansible:
 
 * *ansible-aws.cfg*, which dynamically sets Ansible configuration. An example of such a configuration is reported in the following figure
 
@@ -76,7 +76,7 @@ The scripts wrap Ansible to automate deployment tasks, using the Ansible provide
 
 
 ### OpenShift architecture
-In case of deployment to OpenShift, **[deploy.sh](deploy.sh)** delegates to **[deploy.sh](deployment/openshift/deploy.sh)** script in */*deployment/openshift/* folder, which then runs an **oc new-app** command using **[windfire-restaurants-backend-template.yaml](deployment/openshift/windfire-restaurants-backend-template.yaml)** OpenShift Template; the template defines and creates all the following objects:
+In case of deployment to OpenShift, **[deploy.sh](deploy.sh)** delegates to **[deploy.sh](deployment/openshift/deploy.sh)** script in *deployment/openshift/* folder, which then runs an **oc new-app** command using **[windfire-restaurants-backend-template.yaml](deployment/openshift/jenkins/windfire-restaurants-backend-template.yaml)** OpenShift Template; the template defines and creates all the following objects:
 
 * *ImageStream* that references the container image in OpenShift Internal Registry
 * *BuildConfig* of type Git that uses *nodejs:10-SCL* Source-to-Build image to build from source code
