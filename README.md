@@ -85,7 +85,9 @@ In case of deployment to OpenShift, **[deploy.sh](deploy.sh)** delegates to **[d
 * *Route* that exposes the Service outside the OpenShift cluster
 
 #### Jenkins pipeline
-A BuildConfig definition of type JenkinsPipeline is also available in **[buildconfig.yaml](deployment/openshift/jenkins/buildconfig.yaml)** to allow using Jenkins to automate build and deployment to OpenShift; the BuildConfig then delegates the build and deployment steps to [Jenkinsfile](Jenkinsfile)
+A BuildConfig definition of type JenkinsPipeline is also available in **[buildconfig.yaml](deployment/openshift/jenkins/buildconfig.yaml)** to allow using Jenkins to automate build and deployment to OpenShift; the BuildConfig then delegates the build and deployment steps to [Jenkinsfile](Jenkinsfile).
+
+You will obviously need to have access to a Jenkins instance and configure it adequately; you can refer to my other GitHub repository https://github.com/robipozzi/devops/blob/master/Jenkins/README.md for instructions on how to setup and configure Jenkins on OpenShift itself.
 
 #### OpenShift pipeline
 An implementation of build and deployment procedure with OpenShift Pipelines (based on Tekton) is ongoing and will be delivered soon.
