@@ -35,7 +35,7 @@ undeployFromOpenShift()
 {
 	## Undeploy Windfire Restaurants backend component from Red Hat OpenShift
     echo ${cyn}Undeploy Windfire Restaurants backend component from Red Hat OpenShift ...${end}
-    deployment/openshift/undeploy.sh
+    deployment/openshift/oc-undeploy.sh
     echo ${cyn}Done${end}
     echo
 }

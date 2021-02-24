@@ -47,7 +47,7 @@ deployToOpenShift()
 {
 	## Deploy Windfire Restaurants backend component to Red Hat OpenShift using Jenkins pipeline
     echo ${cyn}Deploy Windfire Restaurants backend component to Red Hat OpenShift ...${end}
-    deployment/openshift/jenkins/deploy.sh
+    deployment/openshift/oc-deploy.sh
     echo ${cyn}Done${end}
     echo
 }
@@ -88,7 +88,7 @@ printSelectPlatform()
     echo "${grn}1. Raspberry${end}"
     echo "${grn}2. AWS Single Zone${end}"
     echo "${grn}3. AWS Multi Zone${end}"
-    echo "${grn}4. OpenShift (using Jenkins)${end}"
+    echo "${grn}4. OpenShift${end}"
     #echo "${grn}5. OpenShift (using OpenShift Pipelines)${end}"
 	read PLATFORM_OPTION
 	setDeployFunction
