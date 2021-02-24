@@ -5,10 +5,10 @@ metadata:
   namespace: windfire
 spec:
   params:
-    - default: nodejs
+    - default: windfire-restaurants-node
       name: APP_NAME
       type: string
-    - default: 'https://github.com/sclorg/nodejs-ex.git'
+    - default: 'https://github.com/robipozzi/windfire-restaurants-node'
       name: GIT_REPO
       type: string
     - default: master

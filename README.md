@@ -35,7 +35,7 @@ The scripts currently expose 4 deployment/undeployment options:
 * *Raspberry* : it automates *Windfire Restaurants Backend* microservice deployment/undeployment in a Raspberry Pi target architecture;
 * *AWS Single Zone* : it automates *Windfire Restaurants Backend* microservice deployment to an AWS architecture with publicly accessible Frontend and Backend subnets in a single availability zone
 * *AWS Multi Zone* : it automates *Windfire Restaurants Backend* microservice deployment to an AWS architecture with Frontend and Backend subnets in a variable number of availability zones to create a Fault Tolerant architecture
-* *OpenShift (using Jenkins)* : it automates *Windfire Restaurants Backend* microservice deployment to an OpenShift cluster, using a Jenkins pipeline
+* *OpenShift* : it automates *Windfire Restaurants Backend* microservice deployment to an OpenShift cluster, using a Jenkins pipeline
 
 ### Raspberry deployment architecture
 Automation is implemented using Ansible technology (https://www.ansible.com/): refer to Ansible technical documentation (https://docs.ansible.com/) for detailed instructions regarding installation and setup.
@@ -76,7 +76,7 @@ The scripts wrap Ansible to automate deployment tasks, using the Ansible provide
 
 
 ### OpenShift architecture
-In case of deployment to OpenShift, **[deploy.sh](deploy.sh)** delegates to **[deploy.sh](deployment/openshift/deploy.sh)** script in *deployment/openshift/* folder, which then runs an **oc new-app** command using **[windfire-restaurants-backend-template.yaml](deployment/openshift/jenkins/windfire-restaurants-backend-template.yaml)** OpenShift Template; the template defines and creates all the following objects:
+In case of deployment to OpenShift, **[deploy.sh](deploy.sh)** delegates to **[oc-deploy.sh](deployment/openshift/oc-deploy.sh)** script in *deployment/openshift/* folder, which then runs an **oc new-app** command using **[windfire-restaurants-backend-template.yaml](deployment/openshift/jenkins/windfire-restaurants-backend-template.yaml)** OpenShift Template; the template defines and creates all the following objects:
 
 * *ImageStream* that references the container image in OpenShift Internal Registry
 * *BuildConfig* of type Git that uses *nodejs:10-SCL* Source-to-Build image to build from source code
@@ -85,7 +85,7 @@ In case of deployment to OpenShift, **[deploy.sh](deploy.sh)** delegates to **[d
 * *Route* that exposes the Service outside the OpenShift cluster
 
 #### Jenkins pipeline
-A BuildConfig definition of type JenkinsPipeline is also available in **[buildconfig.yaml](deployment/openshift/jenkins/buildconfig.yaml)** to allow using Jenkins to automate build and deployment to OpenShift; the BuildConfig then delegates the build and deployment steps to [Jenkinsfile](Jenkinsfile).
+A BuildConfig definition of type JenkinsPipeline is defined in **[buildconfig.yaml](deployment/openshift/jenkins/buildconfig.yaml)** to allow using Jenkins to automate build and deployment to OpenShift; the BuildConfig then delegates the build and deployment steps to [Jenkinsfile](Jenkinsfile). Run **[create-buildconfig.sh](deployment/openshift/jenkins/create-buildconfig.sh)** to create the *BuildConfig* object
 
 You will obviously need to have access to a Jenkins instance and configure it adequately; you can refer to my other GitHub repository https://github.com/robipozzi/devops/blob/master/Jenkins/README.md for instructions on how to setup and configure Jenkins on OpenShift itself.
 
