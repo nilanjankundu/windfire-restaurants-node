@@ -92,6 +92,6 @@ A BuildConfig definition of type JenkinsPipeline is defined in **[buildconfig.ya
 Run **[create-buildconfig.sh](deployment/openshift/jenkins/create-buildconfig.sh)** to create the *BuildConfig* object, that can then be used to start Builds; the BuildConfig then delegates the actual build and deployment steps to this **[Jenkinsfile](Jenkinsfile)**. 
 
 #### OpenShift pipeline
-An implementation of build and deployment procedure with OpenShift Pipelines (based on Tekton) is ongoing and will be delivered soon.
+An implementation of build and deployment procedures with OpenShift Pipelines (based on Tekton) is ongoing and will be delivered soon.
 
 [TODO]
