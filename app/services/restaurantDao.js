@@ -4,6 +4,7 @@ const mongodb = require('mongodb');
 const fs = require('fs');
 var logger = require('../utils/logger');
 // Variable declarations
+let dbType = configuration.getProperty('db.type');
 let dbUrl;
 let dbUser;
 let dbPassword;
@@ -51,24 +52,16 @@ function initConfig() {
     collection = process.env.DB_COLLECTION || configuration.getProperty('db.collection');
     logger.debug("######## RestaurantDao.config called, will connect to uri " + uri + " ...");
 }
+
 function findAll(callback) {
-    initConfig();
-    logger.debug("######## RestaurantDao.findAll called and connecting to uri " + uri + " ...");
-    MongoClient.connect(uri, mongodbOptions, function(err, db) {
-        logger.info("######## Connecting ...");
-        if (err) 
-            throw err;
-        logger.info("######## Connecting db " + dbName + " ...");
-        var dbo = db.db(dbName);  
-        logger.info("######## Querying collection " + collection + " ...");
-        dbo.collection(collection).find().toArray(function(err, result) {
-            if (err) 
-                throw err;
-            logger.info("######## Query executed ...");
-            callback(result);
-            db.close();
-        });
-    });
+    switch (dbType) {
+        case "mongodb":
+            __findAllMongoDb(callback)
+            break;
+        default:
+            __fakeFindAll(callback);
+            break;
+    }
 }
 
 function create(inputData, callback) {
@@ -114,6 +107,39 @@ function removeById(id, callback) {
     });
 }
 
+// ################### MongoDb Data Access - START
+function __findAllMongoDb(callback) {
+	initConfig();
+    logger.debug("######## RestaurantDao.findAll called and connecting to uri " + uri + " ...");
+    MongoClient.connect(uri, mongodbOptions, function(err, db) {
+        logger.info("######## Connecting ...");
+        if (err) 
+            throw err;
+        logger.info("######## Connecting db " + dbName + " ...");
+        var dbo = db.db(dbName);  
+        logger.info("######## Querying collection " + collection + " ...");
+        dbo.collection(collection).find().toArray(function(err, result) {
+            if (err) 
+                throw err;
+            logger.info("######## Query executed ...");
+            callback(result);
+            db.close();
+        });
+    });
+}
+// ################### MongoDb Data Access - END
+// =================== Fake Data Access - START
+function __fakeFindAll(callback) {
+	var restaurant1 = { id : 1, name : "Hostaria Vecchio Portico", city : "Arona", rating: 4};
+	var restaurant2 = { id : 2, name : "Il Ragazzo di Campagna", city : "Gallarate", rating: 4}
+	var restaurant3 = { id : 3, name : "Il Cormorano", city : "Milano", rating: 3}
+	var restaurant4 = { id : 4, name : "Roadhouse", city : "Varese", rating: 3}
+	var restaurant5 = { id : 5, name : "Arancioamaro", city : "Cannero", rating: 3}
+	var restaurants = [restaurant1, restaurant2, restaurant3, restaurant4, restaurant5];
+	callback({ restaurants : restaurants});
+}
+// =================== Fake Data Access - START
+// ################### Exposed APIs
 exports.findAll = findAll;
 exports.create = create;
 exports.removeById = removeById;
