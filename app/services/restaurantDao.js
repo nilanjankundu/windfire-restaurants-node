@@ -1,10 +1,14 @@
-// Module initialization
+// ##################################
+// ###### Add required modules ######
+// ##################################
+var logger = require('../utils/logger');
 const configuration = require('../utils/configuration');
 const mongodb = require('mongodb');
 const fs = require('fs');
-var logger = require('../utils/logger');
-// Variable declarations
-let dbType = configuration.getProperty('db.type');
+// ###################################
+// ###### Variable declarations ######
+// ###################################
+let dbType = process.env.DB_TYPE || configuration.getProperty('db.type');
 let dbUrl;
 let dbUser;
 let dbPassword;
@@ -27,7 +31,9 @@ const mongodbOptions = {
         sslCA: ca
     }
 }
-
+// #######################
+// ###### Functions ######
+// #######################
 function initConfig() {
     logger.info("######## RestaurantDao.initConfig called ...");
     const dbSecret = process.env.DB_SECRET;

@@ -1,4 +1,4 @@
-source setenv.sh
+source ./setenv.sh
 
 # ##### START - Variable section
 SCRIPT=undeploy.sh
@@ -20,7 +20,7 @@ undeployFromRaspberry()
 undeployFromAWS()
 {
 	## Undeploy Windfire Restaurants backend component from AWS
-    echo ${cyn}Uneploy Windfire Restaurants backend component from AWS ...${end}
+    echo ${cyn}Undeploy Windfire Restaurants backend component from AWS ...${end}
     ANSIBLE_CONFIG_FILE=ansible-aws.cfg
     echo ${cyn}Invoking ansible-config.sh to dynamically create configuration files for Ansible ...${end}
     deployment/aws/ansible-config.sh $ANSIBLE_CONFIG_FILE

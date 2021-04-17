@@ -1,15 +1,19 @@
 source ../../../setenv.sh
 
 # ##### START - Variable section
-SCRIPT=create-pipeline.sh
+SCRIPT=remove-pipeline-run.sh
 OPENSHIFT_PROJECT=windfire
 # ##### END - Variable section
 
 run()
 {
     oc project $OPENSHIFT_PROJECT
-    oc create -f pvc.yaml
-    oc create -f windfire-restaurants-backend-pipeline.yaml
+    tkn pipelinerun delete -p windfire-restaurants-backend -f
+    # Also delete OpenShift objects related to windfire-restaurant-node application created by the pipeline
+    oc delete route windfire-restaurants-backend
+    oc delete svc windfire-restaurants-backend
+    oc delete imagestream windfire-restaurants-backend
+    oc delete dc windfire-restaurants-backend
 }
 
 setOpenshiftProject()

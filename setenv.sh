@@ -16,7 +16,6 @@ CONTAINER_IMAGE_VERSION=1.0
 CONTAINER_NAME=windfire-restaurants-node
 DOCKER_HUB_ID=robipozzi
 OPENSHIFT_IMAGE_REGISTRY=default-route-openshift-image-registry.robipozzi-rhocp-588309-3c76f4d12b7fe02f9cab56e64bec3e29-0000.eu-de.containers.appdomain.cloud
-OPENSHIFT_PROJECT=windfire
 OPENSHIFT_APP_LABEL=windfire-restaurants-backend
 OPENSHIFT_JENKINS_BUILDCONFIG=windfire-restaurants-node-pipeline
 ###### Variable section - END

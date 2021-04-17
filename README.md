@@ -7,7 +7,7 @@
   - [AWS architecture](#aws-architecture)
   - [OpenShift architecture](#openshift-architecture)
     - [Jenkins pipeline](#jenkins-pipeline)
-    - [OpenShift pipeline (work in progress)](#openshift-pipeline)
+    - [OpenShift pipeline](#openshift-pipeline)
 
 ## Overview
 This repository contains the code for the backend microservice of my *Windfire Restaurants* application, along with scripts, playbooks and configurations to automate application run and deployment to target infrastructures.
@@ -27,15 +27,23 @@ Before starting to use and test this microservice you also need to create a **co
 This microservice can be run locally by simply launching **[app-run.sh](app/app-run.sh)** script, available in the */app* folder.
 
 ## Target architectures and deployment automation
+*Windfire Restaurants Backend* microservice can be deployed to different kind of infrastructures; automation procedures are provided in this repository for Raspberry, AWS and Red Hat OpenShift.
+
+**WARNING: OpenShift pre-requisites**: in case of deployment to Red Hat OpenShift, you firstly need to:
+* Create the OpenShift Pipeline and configure Service Accounts for build and deployment appropriately, following [these instructions](#openshift-pipeline).
+
 The **[deploy.sh](deploy.sh)** and **[undeploy.sh](undeploy.sh)** scripts are provided to run deployment/undeployment automation tasks, as it can be seen in the figure below. 
 
 ![](images/deploy.png)
 
-The scripts currently expose 4 deployment/undeployment options:
+The scripts currently expose 5 deployment/undeployment options:
 * *Raspberry* : it automates *Windfire Restaurants Backend* microservice deployment/undeployment in a Raspberry Pi target architecture;
 * *AWS Single Zone* : it automates *Windfire Restaurants Backend* microservice deployment to an AWS architecture with publicly accessible Frontend and Backend subnets in a single availability zone
 * *AWS Multi Zone* : it automates *Windfire Restaurants Backend* microservice deployment to an AWS architecture with Frontend and Backend subnets in a variable number of availability zones to create a Fault Tolerant architecture
-* *OpenShift* : it automates *Windfire Restaurants Backend* microservice deployment to an OpenShift cluster, using a Jenkins pipeline
+* *OpenShift (using Template)* : it automates *Windfire Restaurants Backend* microservice deployment to an OpenShift cluster, using a Template
+* *OpenShift (using OpenShift Pipeline)* : it automates *Windfire Restaurants Backend* microservice deployment to an OpenShift cluster, running an OpenShift Pipeline. 
+
+Another deployment automation strategy is also available, based on Jenkins, details on how to implement and use it are in [Jenkins pipeline](#jenkins-pipeline) paragraph.
 
 ### Raspberry deployment architecture
 Automation is implemented using Ansible technology (https://www.ansible.com/): refer to Ansible technical documentation (https://docs.ansible.com/) for detailed instructions regarding installation and setup.
@@ -51,7 +59,6 @@ where:
 Change the parameters according to your environment.
 
 The scripts wrap Ansible to automate deployment tasks, using the Ansible provided playbook **[deploy.yaml](deployment/raspberry/deploy.yaml)** for deployment and the Ansible provided playbook **[remove.yaml](deployment/raspberry/remove.yaml)** for microservice undeployment.
-
 
 ### AWS architecture
 AWS target deployment environment is based on the following Architecture
@@ -74,7 +81,6 @@ In case of deployment to AWS, since the Cloud architecture is more dynamic by na
 
 The scripts wrap Ansible to automate deployment tasks, using the Ansible provided playbook **[deploy.yaml](deployment/aws/deploy.yaml)** for deployment and the Ansible provided playbook **[remove.yaml](deployment/aws/remove.yaml)** for microservice undeployment.
 
-
 ### OpenShift architecture
 In case of deployment to OpenShift, **[deploy.sh](deploy.sh)** delegates to **[oc-deploy.sh](deployment/openshift/oc-deploy.sh)** script in *deployment/openshift/* folder, which then runs an **oc new-app** command using **[windfire-restaurants-backend-template.yaml](deployment/openshift/jenkins/windfire-restaurants-backend-template.yaml)** OpenShift Template; the template defines and creates all the following objects:
 
@@ -94,4 +100,5 @@ Run **[create-buildconfig.sh](deployment/openshift/jenkins/create-buildconfig.sh
 #### OpenShift pipeline
 An implementation of build and deployment procedures with OpenShift Pipelines (based on Tekton) is ongoing and will be delivered soon.
 
+by running **[create-serviceaccount.sh](deployment/openshift/create-serviceaccount.sh)** script.
 [TODO]

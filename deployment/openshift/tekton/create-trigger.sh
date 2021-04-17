@@ -1,15 +1,20 @@
 source ../../../setenv.sh
 
 # ##### START - Variable section
-SCRIPT=create-pipeline.sh
+SCRIPT=create-trigger.sh
 OPENSHIFT_PROJECT=windfire
 # ##### END - Variable section
 
 run()
 {
     oc project $OPENSHIFT_PROJECT
-    oc create -f pvc.yaml
-    oc create -f windfire-restaurants-backend-pipeline.yaml
+    oc create -f trigger-binding.yaml
+    oc create -f trigger-template.yaml
+    oc create -f trigger.yaml
+    oc create -f event-listener.yaml
+    sleep 5
+    oc expose svc el-windfire-restaurants-backend
+    echo "URL: $(oc get route el-windfire-restaurants-backend --template='http://{{.spec.host}}')"
 }
 
 setOpenshiftProject()

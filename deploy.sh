@@ -1,4 +1,4 @@
-source setenv.sh
+source ./setenv.sh
 
 # ##### START - Variable section
 SCRIPT=deploy.sh
@@ -45,8 +45,8 @@ deployToAWS()
 
 deployToOpenShift()
 {
-	## Deploy Windfire Restaurants backend component to Red Hat OpenShift using Jenkins pipeline
-    echo ${cyn}Deploy Windfire Restaurants backend component to Red Hat OpenShift ...${end}
+	## Deploy Windfire Restaurants backend component to Red Hat OpenShift using Template
+    echo ${cyn}Deploy Windfire Restaurants backend component to Red Hat OpenShift using Template ...${end}
     deployment/openshift/oc-deploy.sh
     echo ${cyn}Done${end}
     echo
@@ -55,8 +55,8 @@ deployToOpenShift()
 runOpenShiftPipeline()
 {
 	## Deploy Windfire Restaurants backend component to Red Hat OpenShift using OpenShift pipeline
-    echo ${cyn}Deploy Windfire Restaurants backend component to Red Hat OpenShift ...${end}
-    deployment/openshift/tekton/deploy.sh
+    echo ${cyn}Deploy Windfire Restaurants backend component to Red Hat OpenShift using OpenShift Pipeline ...${end}
+    deployment/openshift/tekton/run-pipeline.sh
     echo ${cyn}Done${end}
     echo
 }
@@ -88,8 +88,8 @@ printSelectPlatform()
     echo "${grn}1. Raspberry${end}"
     echo "${grn}2. AWS Single Zone${end}"
     echo "${grn}3. AWS Multi Zone${end}"
-    echo "${grn}4. OpenShift${end}"
-    #echo "${grn}5. OpenShift (using OpenShift Pipelines)${end}"
+    echo "${grn}4. OpenShift (using Template)${end}"
+    echo "${grn}5. OpenShift (using OpenShift Pipelines)${end}"
 	read PLATFORM_OPTION
 	setDeployFunction
 }

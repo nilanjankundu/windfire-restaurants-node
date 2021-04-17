@@ -1,15 +1,18 @@
 source ../../../setenv.sh
 
 # ##### START - Variable section
-SCRIPT=create-pipeline.sh
+SCRIPT=delete-trigger.sh
 OPENSHIFT_PROJECT=windfire
 # ##### END - Variable section
 
 run()
 {
     oc project $OPENSHIFT_PROJECT
-    oc create -f pvc.yaml
-    oc create -f windfire-restaurants-backend-pipeline.yaml
+    oc delete -f trigger-binding.yaml
+    oc delete -f trigger-template.yaml
+    oc delete -f trigger.yaml
+    oc delete -f event-listener.yaml
+    oc delete route el-windfire-restaurants-backend
 }
 
 setOpenshiftProject()

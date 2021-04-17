@@ -1,15 +1,14 @@
-source ../../../setenv.sh
+source ./setenv.sh
 
 # ##### START - Variable section
-SCRIPT=create-pipeline.sh
+SCRIPT=run-s2i-pipeline.sh
 OPENSHIFT_PROJECT=windfire
 # ##### END - Variable section
 
 run()
 {
     oc project $OPENSHIFT_PROJECT
-    oc create -f pvc.yaml
-    oc create -f windfire-restaurants-backend-pipeline.yaml
+    tkn pipeline start windfire-restaurants-backend-s2i -s pipeline -w name=workspace,claimName=windfire-restaurants-pvc -p APP_NAME=windfire-restaurants-backend -p GIT_REPO=https://github.com/robipozzi/windfire-restaurants-node -p IMAGE=quay.io/robipozzi/windfire-restaurants-node:1.0
 }
 
 setOpenshiftProject()

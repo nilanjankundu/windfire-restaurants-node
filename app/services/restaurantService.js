@@ -3,9 +3,9 @@
 // ##################################
 var logger = require('../utils/logger');
 var restaurantDao = require('./restaurantDao');
-// ################################
-// ###### Exported Functions ######
-// ################################
+// #######################
+// ###### Functions ######
+// #######################
 function getRestaurants(callback) {
 	logger.info("RestaurantService.getRestaurants called");
 	restaurantDao.findAll(callback);

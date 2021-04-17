@@ -2,7 +2,7 @@ var propertiesReader = require('properties-reader');
 var logger = require('./logger');
 // Variables section
 var configDir = (process.env.CONFIG_DIR || (process.cwd() + '/config'));
-logger.info("Configuration files directory from CONFIG_DIR environment variable = " + configDir);
+logger.info("Configuration files directory from environment = " + configDir);
 var properties;
 	try {
 		properties = propertiesReader(configDir + '/config.properties');
@@ -13,5 +13,5 @@ var properties;
 function getProperty(key) {
 	return properties.get(key);
 }	
-
+// ################### Exposed APIs
 exports.getProperty = getProperty;

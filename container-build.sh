@@ -1,4 +1,4 @@
-source setenv.sh
+source ./setenv.sh
 
 echo ${cyn}Removing $CONTAINER_IMAGE_NAME:$CONTAINER_IMAGE_VERSION image ...${end}
 docker rmi -f $CONTAINER_IMAGE_NAME:$CONTAINER_IMAGE_VERSION
