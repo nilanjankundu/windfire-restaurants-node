@@ -74,6 +74,8 @@ objects:
         - name: ${APP_NAME}
           image: ${APP_NAME}:latest
           env:
+            - name: DB_TYPE
+              value: ${DB_TYPE}
             #- name: DB_SECRET
             #  valueFrom:
             #      secretKeyRef:
@@ -159,6 +161,9 @@ parameters:
     required: true
   - name: OPENSHIFT_CLUSTER_DOMAIN 
     required: true
+  - name: DB_TYPE
+    required: true
+    value: fake
   - name: DB_SECRET
     required: true
     value: binding-mongodb-demo
