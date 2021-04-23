@@ -1,12 +1,11 @@
 source ./setenv.sh
 
-# ***** START - Function section
+# ***** Function section - START
 undeploy()
 {
     oc project $OPENSHIFT_PROJECT $TEST
     oc delete all -l app=$OPENSHIFT_APP_LABEL
 }
-# ***** END - Function section
 
 inputParameters()
 {
@@ -18,7 +17,7 @@ inputParameters()
     fi
     undeploy
 }
-# ***** END - Function section
+# ***** Function section - END
 
 # ##############################################
 # #################### MAIN ####################

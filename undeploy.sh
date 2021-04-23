@@ -1,12 +1,10 @@
 source ./setenv.sh
-
-# ##### START - Variable section
+# ##### Variable section - START
 SCRIPT=undeploy.sh
 PLATFORM_OPTION=$1
 DEPLOY_FUNCTION=
-# ##### END - Variable section
-
-# ***** START - Function section
+# ##### Variable section - END
+# ***** Function section - START
 undeployFromRaspberry()
 {
 	## Undeploy Windfire Restaurants backend component from remote Raspberry box
@@ -72,7 +70,7 @@ setUnDeployFunction()
 			;;
 	esac
 }
-# ***** END - Function section
+# ***** Function section - END
 
 # ##############################################
 # #################### MAIN ####################
