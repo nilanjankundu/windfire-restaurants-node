@@ -1,4 +1,9 @@
 source ./setenv.sh
+# ##### Variable section - START
+SCRIPT=oc-deploy.sh
+OPENSHIFT_PROJECT=$1
+GITHUB_SECRET=$2
+# ##### Variable section - END
 # ***** Function section - START
 deploy()
 {
@@ -14,17 +19,25 @@ deploy()
 
 inputParameters()
 {
-    ## Input OpenShift Project
-	echo ${grn}Enter OpenShift project where application artifacts will be deployed, skipping will set to ${end}${mag}windfire : ${end}
-	read OPENSHIFT_PROJECT
-    if [ "$OPENSHIFT_PROJECT" == "" ]; then
-        OPENSHIFT_PROJECT=windfire
+    ###### Input OpenShift Project
+    if [ "$OPENSHIFT_PROJECT" != "" ]; then
+        echo OpenShift project is set to $OPENSHIFT_PROJECT
+    else
+        echo ${grn}Enter OpenShift project - leaving blank will set project to ${end}${mag}windfire : ${end}
+        read OPENSHIFT_PROJECT
+        if [ "$OPENSHIFT_PROJECT" == "" ]; then
+            OPENSHIFT_PROJECT=windfire
+        fi
     fi
     ###### Input GitHub Secret
-    echo ${grn}Enter Secret Name for GitHub - leaving blank will set secret name to ${end}${mag}robipozzi-github : ${end}
-    read GITHUB_SECRET
-    if [ "$GITHUB_SECRET" == "" ]; then
-        GITHUB_SECRET=robipozzi-github
+    if [ "$GITHUB_SECRET" != "" ]; then
+        echo GitHub Secret is set to $GITHUB_SECRET
+    else
+        echo ${grn}Enter Secret Name for GitHub - leaving blank will set secret name to ${end}${mag}robipozzi-github : ${end}
+        read GITHUB_SECRET
+        if [ "$GITHUB_SECRET" == "" ]; then
+            GITHUB_SECRET=robipozzi-github
+        fi
     fi
     deploy
 }
