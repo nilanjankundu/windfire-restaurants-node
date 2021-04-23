@@ -3,9 +3,10 @@
 - [Before you start](#before-you-start)
 - [Run microservice on local](#run-microservice-on-local)
 - [Target architectures and deployment automation](#target-architectures-and-deployment-automation)
-  - [Raspberry deployment architecture](#raspberry-deployment-architecture)
-  - [AWS architecture](#aws-architecture)
-  - [OpenShift architecture](#openshift-architecture)
+  - [Raspberry deployment](#raspberry-deployment)
+  - [AWS deployment](#aws-deployment)
+  - [OpenShift deployment](#openshift-deployment)
+    - [OpenShift Template](#openshift-template)
     - [OpenShift pipeline](#openshift-pipeline)
     - [Jenkins pipeline](#jenkins-pipeline)
 
@@ -44,7 +45,7 @@ The scripts currently expose 5 deployment/undeployment options:
 
 Another deployment automation strategy is also available, based on Jenkins, details on how to implement and use it are in [Jenkins pipeline](#jenkins-pipeline) paragraph.
 
-### Raspberry deployment architecture
+### Raspberry deployment
 Automation is implemented using Ansible technology (https://www.ansible.com/): refer to Ansible technical documentation (https://docs.ansible.com/) for detailed instructions regarding installation and setup.
 
 A file, named **[ansible.cfg](deployment/raspberry/ansible.cfg)**, is provided in *deployment/raspberry* folder to set basic configurations needed to run Ansible: **[deploy.sh](deploy.sh)** and **[undeploy.sh](undeploy.sh)** scripts set ANSIBLE_CONFIG environment variable pointing to this file; the basic configuration you should have is something like this:
@@ -59,7 +60,7 @@ Change the parameters according to your environment.
 
 The scripts wrap Ansible to automate deployment tasks, using the Ansible provided playbook **[deploy.yaml](deployment/raspberry/deploy.yaml)** for deployment and the Ansible provided playbook **[remove.yaml](deployment/raspberry/remove.yaml)** for microservice undeployment.
 
-### AWS architecture
+### AWS deployment
 AWS target deployment environment is based on the following Architecture
 
 ![](images/AWS-robipozzi_windfire-restaurants.png)
@@ -80,8 +81,11 @@ In case of deployment to AWS, since the Cloud architecture is more dynamic by na
 
 The scripts wrap Ansible to automate deployment tasks, using the Ansible provided playbook **[deploy.yaml](deployment/aws/deploy.yaml)** for deployment and the Ansible provided playbook **[remove.yaml](deployment/aws/remove.yaml)** for microservice undeployment.
 
-### OpenShift architecture
-Before deploying the application to OpenShift you firstly need to run **[create-github-secret.sh](deployment/openshift/create--github-secret.sh)** script, which creates a Secret that allows deployment procedures to access and clone source code repository even in case GitHub repo is private and not publicly accessible.
+### OpenShift deployment
+[TODO]
+
+#### OpenShift Template
+Before deploying the application to OpenShift you firstly need to run **[create-github-secret.sh](deployment/openshift/create-github-secret.sh)** script, which creates a Secret that allows deployment procedures to access and clone source code repository even in case GitHub repo is private and not publicly accessible.
 
 Once you have created the GitHub Secret, you can run **[deploy.sh](deploy.sh)** that delegates to **[oc-deploy.sh](deployment/openshift/oc-deploy.sh)** script, which then runs an **oc new-app** command using **[windfire-restaurants-backend-template.yaml](deployment/openshift/jenkins/windfire-restaurants-backend-template.yaml)** OpenShift Template; the template defines and creates all the following objects:
 
