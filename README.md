@@ -82,7 +82,12 @@ In case of deployment to AWS, since the Cloud architecture is more dynamic by na
 The scripts wrap Ansible to automate deployment tasks, using the Ansible provided playbook **[deploy.yaml](deployment/aws/deploy.yaml)** for deployment and the Ansible provided playbook **[remove.yaml](deployment/aws/remove.yaml)** for microservice undeployment.
 
 ### OpenShift deployment
-[TODO]
+Deployment of *Windfire Restaurants* application component to OpenShift is supported in the following 3 ways:
+- [Using an OpenShift Template](#openshift-template) : this deployment strategy runs a script which uses an OpenShift Template
+- [Running an OpenShift pipeline](#openshift-pipeline) : this deployment strategy creates an OpenShift pipeline that can be run to deploy the application component to the cluster
+- [Running a Jenkins pipeline](#jenkins-pipeline) : this deployment strategy creates a Jenkins pipeline that can be run to deploy the application component to the cluster
+
+Scripts and instructions are provided for each deployment strategy
 
 #### OpenShift Template
 Before deploying the application to OpenShift you firstly need to run **[create-github-secret.sh](deployment/openshift/create-github-secret.sh)** script, which creates a Secret that allows deployment procedures to access and clone source code repository even in case GitHub repo is private and not publicly accessible.
@@ -96,6 +101,11 @@ Once you have created the GitHub Secret, you can run **[deploy.sh](deploy.sh)** 
 * *Route* that exposes the Service outside the OpenShift cluster
 
 #### OpenShift pipeline
+Red Hat OpenShift Pipelines is a cloud-native continuous integration and delivery (CI/CD) solution for building pipelines using [Tekton](https://tekton.dev/).
+
+Tekton is a flexible Kubernetes-native open-source CI/CD framework, which enables automating deployments across multiple platforms (Kubernetes, serverless, VMs, etc) by abstracting away the underlying details.
+
+Refer to Red Hat OpenShift official documentation (https://docs.openshift.com/container-platform/4.6/pipelines/creating-applications-with-cicd-pipelines.html) for more info about OpenShift Pipelines.
 
 ##### Before you start
 Before experimenting with OpenShift Pipelines, you need to take 2 preparatory steps:
@@ -116,7 +126,7 @@ Keep the default settings on the Create Operator Subscription page and click Sub
 ##### Configure Service Account
 To make sure the pipeline has the appropriate permissions to store images in the local OpenShift registry, we need to create a service account. We'll call it **pipeline**.
 
-Running **[create-serviceaccount.sh](create-serviceaccount.sh)** script does everything that is needed:
+Running **[create-serviceaccount.sh](deployment/openshift/create-serviceaccount.sh)** script does everything that is needed:
 - it sets context to the OpenShift project selected (the project is automatically created if it does not pre-exist)
 - it creates a **pipeline** Service Account
 - it adds a **privileged** Security Context Constraint to pipeline account
@@ -124,6 +134,30 @@ Running **[create-serviceaccount.sh](create-serviceaccount.sh)** script does eve
 - it creates a Secret for GitHub credentials, annotates with **"tekton.dev/git-0=https://github.com"** and links it to **pipeline** Service Account
 - it creates a Secret for Quay credentials, annotates with **"tekton.dev/docker-0=quay.io"** and links it to **pipeline** Service Account
 - it links Secret for Quay credentials to **default** Service Account for pull
+
+##### Run OpenShift pipeline
+Run **[create-pipeline.sh](deployment/openshift/tekton/create-pipeline.sh)** script to create the Pipeline and all the needed PipelineResources in your OpenShift cluster; the script does the following:
+
+1. It uses **[pvc.yaml](deployment/openshift/tekton/pvc.yaml)** file to create:
+    - *windfire-restaurants-pvc* PersistentVolumeClaim, which provides data storage and binds it to the Workspace. This PersistentVolumeClaim provides the volumes or filesystem required for the Pipeline execution.
+
+    **WARNING:** ensure the PersistentVolumeClaim is bound before trying to run the pipeline.
+2. It uses **[windfire-restaurants-backend-pipeline.yaml](deployment/openshift/tekton/windfire-restaurants-backend-pipeline.yaml)** file to create:
+    - *windfire-restaurants-node-git* PipelineResources, which configures the GitHub repository from which *windfire-restaurants* application source code is taken
+    - *windfire-restaurants-node-image* PipelineResources, which defines the container image that gets created within OpenShift internal registry
+    - *windfire-restaurants-backend* Pipeline, which defines all the steps to build and deploy the *vote* application components
+
+The Pipeline performs the following tasks for the back-end application *vote*:
+- Clones the source code of the application from the Git repository by referring to the git-url and git-revision parameters.
+- Builds the container image and pushes it to container registry using *buildah* ClusterTask.
+- Deploy the image to OpenShift wrapping an *oc new-app* command using *openshift-client* ClusterTask.
+- Expose a Route wrapping an *oc expose* command using *openshift-client* ClusterTask.
+
+Once you have created the Pipeline, you can go to OpenShift web console and start it; alternatively you can also launch **[run-pipeline.sh](deployment/openshift/tekton/run-pipeline.sh)** script which uses **[windfire-restaurants-backend-pipelinerun.yaml](deployment/openshift/tekton/windfire-restaurants-backend-pipelinerun.yaml)** file to run the Pipeline using the previously created PipelineResources:
+    - *windfire-restaurants-node-git*: https://github.com/robipozzi/windfire-restaurants-node
+    - *windfire-restaurants-node-image*: image-registry.openshift-image-registry.svc:5000/windfire/vote-api:2.0
+
+Run **[delete-pipeline.sh](deployment/openshift/tekton/delete-pipeline.sh)** script to delete Pipeline and PipelineResources at once.
 
 #### Jenkins pipeline
 To use this approach, you will firstly need to have access to a Jenkins instance and configure it appropriately; refer to my other GitHub repository https://github.com/robipozzi/devops/blob/master/Jenkins/README.md for instructions on how to setup and configure Jenkins on OpenShift itself.
