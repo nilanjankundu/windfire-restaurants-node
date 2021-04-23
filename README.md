@@ -6,8 +6,8 @@
   - [Raspberry deployment architecture](#raspberry-deployment-architecture)
   - [AWS architecture](#aws-architecture)
   - [OpenShift architecture](#openshift-architecture)
-    - [Jenkins pipeline](#jenkins-pipeline)
     - [OpenShift pipeline](#openshift-pipeline)
+    - [Jenkins pipeline](#jenkins-pipeline)
 
 ## Overview
 This repository contains the code for the backend microservice of my *Windfire Restaurants* application, along with scripts, playbooks and configurations to automate application run and deployment to target infrastructures.
@@ -29,8 +29,7 @@ This microservice can be run locally by simply launching **[app-run.sh](app/app-
 ## Target architectures and deployment automation
 *Windfire Restaurants Backend* microservice can be deployed to different kind of infrastructures; automation procedures are provided in this repository for Raspberry, AWS and Red Hat OpenShift.
 
-**WARNING: OpenShift pre-requisites**: in case of deployment to Red Hat OpenShift, you firstly need to:
-* Create the OpenShift Pipeline and configure Service Accounts for build and deployment appropriately, following [these instructions](#openshift-pipeline).
+**WARNING: OpenShift pre-requisites**: in case of deployment to Red Hat OpenShift, you firstly need to configure Service Accounts for build and deployment appropriately, following [these instructions](#openshift-architecture).
 
 The **[deploy.sh](deploy.sh)** and **[undeploy.sh](undeploy.sh)** scripts are provided to run deployment/undeployment automation tasks, as it can be seen in the figure below. 
 
@@ -82,7 +81,9 @@ In case of deployment to AWS, since the Cloud architecture is more dynamic by na
 The scripts wrap Ansible to automate deployment tasks, using the Ansible provided playbook **[deploy.yaml](deployment/aws/deploy.yaml)** for deployment and the Ansible provided playbook **[remove.yaml](deployment/aws/remove.yaml)** for microservice undeployment.
 
 ### OpenShift architecture
-In case of deployment to OpenShift, **[deploy.sh](deploy.sh)** delegates to **[oc-deploy.sh](deployment/openshift/oc-deploy.sh)** script in *deployment/openshift/* folder, which then runs an **oc new-app** command using **[windfire-restaurants-backend-template.yaml](deployment/openshift/jenkins/windfire-restaurants-backend-template.yaml)** OpenShift Template; the template defines and creates all the following objects:
+Before deploying the application to OpenShift you firstly need to run **[create-github-secret.sh](deployment/openshift/create--github-secret.sh)** script, which creates a Secret that allows deployment procedures to access and clone source code repository even in case GitHub repo is private and not publicly accessible.
+
+Once you have created the GitHub Secret, you can run **[deploy.sh](deploy.sh)** that delegates to **[oc-deploy.sh](deployment/openshift/oc-deploy.sh)** script, which then runs an **oc new-app** command using **[windfire-restaurants-backend-template.yaml](deployment/openshift/jenkins/windfire-restaurants-backend-template.yaml)** OpenShift Template; the template defines and creates all the following objects:
 
 * *ImageStream* that references the container image in OpenShift Internal Registry
 * *BuildConfig* of type Git that uses *nodejs:10-SCL* Source-to-Build image to build from source code
@@ -90,15 +91,39 @@ In case of deployment to OpenShift, **[deploy.sh](deploy.sh)** delegates to **[o
 * *Service* of type ClusterIP that exposes required ports and allows to interact with the running pods from within the OpenShift cluster
 * *Route* that exposes the Service outside the OpenShift cluster
 
+#### OpenShift pipeline
+
+## Before you start
+Before experimenting with OpenShift Pipelines, you need to take 2 preparatory steps:
+1. [Install OpenShift Pipelines](#install-openShift-pipelines) on your OpenShift cluster (pretty obvious !!!).
+2. [Create a Service Account](#configure-service-account) and configure it appropriately.
+
+##### Install OpenShift Pipelines
+Go to OpenShift web console, select **Operators** -> **Operators Hub** from the navigation menu on the left of your OpenShift web console and then search for the OpenShift Pipelines Operator.
+
+![operatorhub](./images/operatorhub.png)
+
+Click on the tile and then the subsequent Install button.
+
+![pipelineoperator](./images/pipelineoperator.png)
+
+Keep the default settings on the Create Operator Subscription page and click Subscribe.
+
+##### Configure Service Account
+To make sure the pipeline has the appropriate permissions to store images in the local OpenShift registry, we need to create a service account. We'll call it **pipeline**.
+
+Running **[create-serviceaccount.sh](create-serviceaccount.sh)** script does everything that is needed:
+- it sets context to the OpenShift project selected (the project is automatically created if it does not pre-exist)
+- it creates a **pipeline** Service Account
+- it adds a **privileged** Security Context Constraint to pipeline account
+- it adds an **edit** Role to pipeline account
+- it creates a Secret for GitHub credentials, annotates with **"tekton.dev/git-0=https://github.com"** and links it to **pipeline** Service Account
+- it creates a Secret for Quay credentials, annotates with **"tekton.dev/docker-0=quay.io"** and links it to **pipeline** Service Account
+- it links Secret for Quay credentials to **default** Service Account for pull
+
 #### Jenkins pipeline
 To use this approach, you will firstly need to have access to a Jenkins instance and configure it appropriately; refer to my other GitHub repository https://github.com/robipozzi/devops/blob/master/Jenkins/README.md for instructions on how to setup and configure Jenkins on OpenShift itself.
 
 A BuildConfig definition of type JenkinsPipeline is defined in **[buildconfig.yaml](deployment/openshift/jenkins/buildconfig.yaml)** to allow using Jenkins to automate build and deployment to OpenShift. 
 
 Run **[create-buildconfig.sh](deployment/openshift/jenkins/create-buildconfig.sh)** to create the *BuildConfig* object, that can then be used to start Builds; the BuildConfig then delegates the actual build and deployment steps to this **[Jenkinsfile](Jenkinsfile)**. 
-
-#### OpenShift pipeline
-An implementation of build and deployment procedures with OpenShift Pipelines (based on Tekton) is ongoing and will be delivered soon.
-
-by running **[create-serviceaccount.sh](deployment/openshift/create-serviceaccount.sh)** script.
-[TODO]

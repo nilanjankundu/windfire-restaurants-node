@@ -1,6 +1,5 @@
 source ./setenv.sh
-
-# ***** START - Function section
+# ***** Function section - START
 deploy()
 {
     oc new-project $OPENSHIFT_PROJECT
@@ -23,7 +22,7 @@ inputParameters()
     fi
     deploy
 }
-# ***** END - Function section
+# ***** Function section - END
 
 # ##############################################
 # #################### MAIN ####################

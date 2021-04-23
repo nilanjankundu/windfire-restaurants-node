@@ -1,6 +1,5 @@
 source ../../setenv.sh
-
-# ##### START - Variable section
+# ##### Variable section - START
 SCRIPT=create-serviceaccount.sh
 OPENSHIFT_PROJECT=
 IMAGE_REGISTRY_OPTION=
@@ -9,17 +8,15 @@ IMAGE_REGISTRY_USERNAME=
 IMAGE_REGISTRY_PASSWORD=
 IMAGE_REGISTRY_SECRET=
 GITHUB_SECRET=
-GITHUB_USERNAME=
-GITHUB_ACCESS_TOKEN=
 PIPELINE_SERVICEACCOUNT=pipeline
-# ##### END - Variable section
-
-createOpenshiftProject()
+# ##### Variable section - END
+# ***** Function section - START
+setOpenshiftProject()
 {
-    echo ${cyn}Creating $OPENSHIFT_PROJECT OpenShift Project ...${end}
+    echo ${cyn}Setting up $OPENSHIFT_PROJECT OpenShift Project ...${end}
     oc new-project $OPENSHIFT_PROJECT
     oc project $OPENSHIFT_PROJECT
-    echo ${cyn}OpenShift Project created${end}
+    echo ${cyn}OpenShift Project set${end}
     echo
 }
 
@@ -60,15 +57,7 @@ createImageRegistrySecret()
 
 createGitHubSecret()
 {
-    echo ${cyn}Creating $GITHUB_SECRET GitHub Secret ...${end}
-	oc project $OPENSHIFT_PROJECT
-    oc create secret generic $GITHUB_SECRET \
-        --from-literal=username=$GITHUB_USERNAME \
-        --from-literal=password=$GITHUB_ACCESS_TOKEN \
-        --type=kubernetes.io/basic-auth
-    echo ${cyn}GitHub Secret created${end}
-    oc annotate secret $GITHUB_SECRET "tekton.dev/git-0=https://github.com"
-    echo
+    source ./create-github-secret.sh $OPENSHIFT_PROJECT $GITHUB_SECRET
 }
 
 setServiceAccount()
@@ -80,8 +69,6 @@ setServiceAccount()
     oc adm policy add-role-to-user edit -z $PIPELINE_SERVICEACCOUNT
     ### Link GitHub Secret to $PIPELINE_SERVICEACCOUNT 
     oc secrets link $PIPELINE_SERVICEACCOUNT $GITHUB_SECRET
-    ### Link GitHub Secret to builder ServiceAccount
-    oc secrets link builder $GITHUB_SECRET
     ### Link Image Registry Secret to $PIPELINE_SERVICEACCOUNT 
     oc secrets link $PIPELINE_SERVICEACCOUNT $IMAGE_REGISTRY_SECRET
     ### Link Image Registry Secret to default ServiceAccount
@@ -91,13 +78,13 @@ setServiceAccount()
 
 inputParameters()
 {
-    ## Create OpenShift Project
+    ## Setup OpenShift Project
 	echo ${grn}Enter OpenShift project - leaving blank will set project to ${end}${mag}windfire : ${end}
 	read OPENSHIFT_PROJECT
     if [ "$OPENSHIFT_PROJECT" == "" ]; then
         OPENSHIFT_PROJECT=windfire
     fi
-    createOpenshiftProject
+    setOpenshiftProject
     ## Select Image Registry
     printSelectImageRegistry
     ## Create Image Registry Secret
@@ -117,14 +104,11 @@ inputParameters()
     if [ "$GITHUB_SECRET" == "" ]; then
         GITHUB_SECRET=robipozzi-github
     fi
-    echo ${grn}Enter GitHub Username : ${end}
-    read GITHUB_USERNAME
-    echo ${grn}Enter GitHub Personal Access Token : ${end}
-    read -s GITHUB_ACCESS_TOKEN
     createGitHubSecret
     ## Create and configure Service Account
     setServiceAccount
 }
+# ***** Function section - END
 
 # ##############################################
 # #################### MAIN ####################

@@ -1,14 +1,12 @@
 source ./setenv.sh
-
-# ##### START - Variable section
+# ##### Variable section - START
 SCRIPT=deploy.sh
 PLATFORM_OPTION=$1
 AWS_ACCESS_KEY=$2
 AWS_SECRET_KEY=$3
 DEPLOY_FUNCTION=
-# ##### END - Variable section
-
-# ***** START - Function section
+# ##### Variable section - END
+# ***** Function section - START
 deployToRaspberry()
 {
 	## Deploy Windfire Restaurants backend component to remote Raspberry box
@@ -112,7 +110,7 @@ setDeployFunction()
 			;;
 	esac
 }
-# ***** END - Function section
+# ***** Function section - END
 
 # ##############################################
 # #################### MAIN ####################
