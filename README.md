@@ -97,7 +97,7 @@ Once you have created the GitHub Secret, you can run **[deploy.sh](deploy.sh)** 
 
 #### OpenShift pipeline
 
-## Before you start
+##### Before you start
 Before experimenting with OpenShift Pipelines, you need to take 2 preparatory steps:
 1. [Install OpenShift Pipelines](#install-openShift-pipelines) on your OpenShift cluster (pretty obvious !!!).
 2. [Create a Service Account](#configure-service-account) and configure it appropriately.
