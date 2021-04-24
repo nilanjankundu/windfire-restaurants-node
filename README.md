@@ -7,8 +7,8 @@
   - [AWS deployment](#aws-deployment)
   - [OpenShift deployment](#openshift-deployment)
     - [OpenShift Template](#openshift-template)
-    - [OpenShift pipeline](#openshift-pipeline)
-    - [Jenkins pipeline](#jenkins-pipeline)
+    - [OpenShift Pipeline](#openshift-pipeline)
+    - [Jenkins Pipeline](#jenkins-pipeline)
 
 ## Overview
 This repository contains the code for the backend microservice of my *Windfire Restaurants* application, along with scripts, playbooks and configurations to automate application run and deployment to target infrastructures.
@@ -99,6 +99,39 @@ Once you have created the GitHub Secret, you can run **[deploy.sh](deploy.sh)** 
 * *DeploymentConfig* that defines how the application is deployed to OpenShift cluster
 * *Service* of type ClusterIP that exposes required ports and allows to interact with the running pods from within the OpenShift cluster
 * *Route* that exposes the Service outside the OpenShift cluster
+
+##### Update application with triggers and GitHub Webhooks
+Once you have deployed the application, it is possible to use GitHub Webhooks to trigger automatic application deployment updates whenever a change is pushed to tht GitHub repository. 
+
+Ensure a GitHub trigger is enabled on the BuildConfig by issuing the following command
+
+**oc set triggers bc/windfire-restaurants-backend --from-github**
+
+This will allow the BuildConfig to be triggered by a webhook that is configured on GitHub.
+
+Firstly you need to get the secret that is automatically generated when the *from-github* trigger is set on the BuildConfig, with the following command:
+
+**oc edit bc/windfire-restaurants-backend**
+
+You should find something like the following, write down the secret, you will need it in a second.
+
+![](images/BuildConfig-GitHub-trigger.png)
+
+Then find the GitHub Webhook URL with the following command:
+
+**oc describe bc/windfire-restaurants-backend**
+
+You should find something similar to the following, write down the URL, replace <secret> with the actual secret you found before and write it down, you will need it when you are going to configure Webhooks in GitHub.
+
+![](images/BuildConfig-GitHub-webhookurl.png)
+
+Now we have everything we need to set a Webhook trigger in GitHub.
+
+Go to the GitHub repo, click on Settings, then Webhooks, click on Add Webhook button and configure it appropriately: set Payload URL to the Webhook URL you noted down before, just like the following:
+
+![](images/GitHub-webhook.png)
+
+With this, every time a commit is pushed to GitHub, the webhook will be triggered running the BuildConfig and updating the application.
 
 #### OpenShift pipeline
 Red Hat OpenShift Pipelines is a cloud-native continuous integration and delivery (CI/CD) solution for building pipelines using [Tekton](https://tekton.dev/).

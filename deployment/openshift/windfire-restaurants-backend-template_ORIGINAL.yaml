@@ -42,6 +42,12 @@ objects:
           namespace: openshift
       type: Source
     triggers:
+    - github:
+        secret: 1hox4xokRYo-BmvkQeFa
+      type: GitHub
+    - generic:
+        secret: Jelop3VLil7b2vRhyahV
+      type: Generic
     - type: ConfigChange
     - imageChange: {}
       type: ImageChange
