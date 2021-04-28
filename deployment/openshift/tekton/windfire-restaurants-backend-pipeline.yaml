@@ -89,14 +89,6 @@ spec:
       workspaces:
         - name: output
           workspace: workspace
-    - name: listing-files
-      taskRef:
-        name: listing-files
-      workspaces:
-        - name: source
-          workspace: workspace
-      runAfter:
-        - fetch-repository
     - name: build-image
       taskRef:
         name: buildah
@@ -110,7 +102,7 @@ spec:
       - name: source
         workspace: workspace
       runAfter:
-      - listing-files
+      - fetch-repository
     - name: deploy
       params:
         - name: ARGS
