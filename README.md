@@ -92,6 +92,11 @@ Scripts and instructions are provided for each deployment strategy
 #### OpenShift Template
 Before deploying the application to OpenShift you firstly need to run **[create-github-secret.sh](deployment/openshift/create-github-secret.sh)** script, which creates a Secret that allows deployment procedures to access and clone source code repository even in case GitHub repo is private and not publicly accessible.
 
+```
+cd deployment/openshift
+./create-github-secret.sh
+```
+
 Once you have created the GitHub Secret, you can run **[deploy.sh](deploy.sh)** that delegates to **[oc-deploy.sh](deployment/openshift/oc-deploy.sh)** script, which then runs an **oc new-app** command using **[windfire-restaurants-backend-template.yaml](deployment/openshift/windfire-restaurants-backend-template.yaml)** OpenShift Template; the template defines and creates all the following objects:
 
 * *ImageStream* that references the container image in OpenShift Internal Registry
