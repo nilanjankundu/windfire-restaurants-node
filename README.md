@@ -34,12 +34,22 @@ Before starting to use and test this microservice you also need to create a **co
 ## Run microservice on local
 This microservice can be run locally by simply launching **[app-run.sh](app/app-run.sh)** script, available in the */app* folder.
 
+```
+cd $HOME/dev/windfire-restaurants-node/app
+./app-run.sh
+```
+
 ## Target architectures and deployment automation
 *Windfire Restaurants Backend* microservice can be deployed to different kind of infrastructures; automation procedures are provided in this repository for Raspberry, AWS and Red Hat OpenShift.
 
 **WARNING: OpenShift pre-requisites**: in case of deployment to Red Hat OpenShift, you firstly need to configure Service Accounts for build and deployment appropriately, following [these instructions](#openshift-architecture).
 
-The **[deploy.sh](deploy.sh)** and **[undeploy.sh](undeploy.sh)** scripts are provided to run deployment/undeployment automation tasks, as it can be seen in the figure below. 
+The **[deploy.sh](deploy.sh)** and **[undeploy.sh](undeploy.sh)** scripts are provided to run deployment/undeployment automation tasks, as it can be seen in the figure below.
+
+```
+cd $HOME/dev/windfire-restaurants-node/
+./deploy.sh
+```
 
 ![](images/deploy.png)
 
@@ -100,11 +110,18 @@ Scripts and instructions are provided for each deployment strategy
 Before deploying the application to OpenShift you firstly need to run **[create-github-secret.sh](deployment/openshift/create-github-secret.sh)** script, which creates a Secret that allows deployment procedures to access and clone source code repository even in case GitHub repo is private and not publicly accessible.
 
 ```
-cd deployment/openshift
+cd $HOME/dev/windfire-restaurants-node/deployment/openshift
 ./create-github-secret.sh
 ```
 
-Once you have created the GitHub Secret, you can run **[deploy.sh](deploy.sh)** that delegates to **[oc-deploy.sh](deployment/openshift/oc-deploy.sh)** script, which then runs an **oc new-app** command using **[windfire-restaurants-backend-template.yaml](deployment/openshift/windfire-restaurants-backend-template.yaml)** OpenShift Template; the template defines and creates all the following objects:
+Once you have created the GitHub Secret, you can run **[deploy.sh](deploy.sh)** 
+
+```
+cd $HOME/dev/windfire-restaurants-node
+./deploy.sh
+```
+
+The script delegates to **[oc-deploy.sh](deployment/openshift/oc-deploy.sh)** script, which then runs an **oc new-app** command using **[windfire-restaurants-backend-template.yaml](deployment/openshift/windfire-restaurants-backend-template.yaml)** OpenShift Template; the template defines and creates all the following objects:
 
 * *ImageStream* that references the container image in OpenShift Internal Registry
 * *BuildConfig* of type Git that uses *nodejs:10-SCL* Source-to-Build image to build from source code
@@ -117,13 +134,17 @@ Once you have deployed the application, it is possible to use GitHub Webhooks to
 
 Ensure a GitHub trigger is enabled on the BuildConfig by issuing the following command
 
-**oc set triggers bc/windfire-restaurants-backend --from-github**
+```
+oc set triggers bc/windfire-restaurants-backend --from-github
+```
 
 This will allow the BuildConfig to be triggered by a webhook that is configured on GitHub.
 
 Firstly you need to get the secret that is automatically generated when the *from-github* trigger is set on the BuildConfig, with the following command:
 
-**oc edit bc/windfire-restaurants-backend**
+```
+oc edit bc/windfire-restaurants-backend
+```
 
 You should find something like the following, write down the secret, you will need it in a second.
 
@@ -131,7 +152,9 @@ You should find something like the following, write down the secret, you will ne
 
 Then find the GitHub Webhook URL with the following command:
 
+```
 **oc describe bc/windfire-restaurants-backend**
+```
 
 You should find something similar to the following, write down the URL, replace <secret> with the actual secret you found before and write it down, you will need it when you are going to configure Webhooks in GitHub.
 
