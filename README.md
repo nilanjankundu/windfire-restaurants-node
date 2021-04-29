@@ -22,6 +22,13 @@ Ensure all the prerequisite software is installed:
 * *Node.js* - installation instructions are available for different platforms at *https://nodejs.org/en/download/*. The application has been developed and tested with Node.js v12.14.1.
 * *npm* - Node.js Package Manager is distributed with Node.js, which means that when you download Node.js, you automatically get npm installed on your computer. The application has been developed and tested with npm v6.13.4.
 
+Clone this repository 
+```
+mkdir $HOME/dev
+cd $HOME/dev
+git clone https://github.com/robipozzi/windfire-restaurants-node
+```
+
 Before starting to use and test this microservice you also need to create a **config.properties** file in *app/config* folder and fill it with appropriate parameter values for the desired environment. A placeholder config properties file, named [config_PLACEHOLDER.properties](app/config/config_PLACEHOLDER.properties) is stored in this repository for convenience.
 
 ## Run microservice on local
