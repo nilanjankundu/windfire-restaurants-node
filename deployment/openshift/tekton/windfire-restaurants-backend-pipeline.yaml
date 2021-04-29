@@ -104,6 +104,9 @@ spec:
       runAfter:
       - fetch-repository
     - name: deploy
+      taskRef:
+        name: openshift-client
+        kind: ClusterTask
       params:
         - name: ARGS
           value:
@@ -113,10 +116,10 @@ spec:
             - --as-deployment-config
       runAfter:
         - build-image
+    - name: expose-route
       taskRef:
         name: openshift-client
         kind: ClusterTask
-    - name: expose-route
       params:
         - name: ARGS
           value:
@@ -125,6 +128,3 @@ spec:
             - --port $(params.SERVICE_PORT)
       runAfter:
         - deploy
-      taskRef:
-        name: openshift-client
-        kind: ClusterTask
