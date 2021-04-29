@@ -153,7 +153,7 @@ You should find something like the following, write down the secret, you will ne
 Then find the GitHub Webhook URL with the following command:
 
 ```
-**oc describe bc/windfire-restaurants-backend**
+oc describe bc/windfire-restaurants-backend
 ```
 
 You should find something similar to the following, write down the URL, replace <secret> with the actual secret you found before and write it down, you will need it when you are going to configure Webhooks in GitHub.
@@ -192,7 +192,12 @@ Click on the tile and then the subsequent Install button.
 Keep the default settings on the Create Operator Subscription page and click Subscribe.
 
 ##### Configure Service Account
-To make sure the pipeline has the appropriate permissions to store images in the local OpenShift registry, we need to create a service account. We'll call it **pipeline**.
+To make sure the pipeline has the appropriate permissions to store images in the local OpenShift registry, we need to create a service account by running **[create-serviceaccount.sh](deployment/openshift/create-serviceaccount.sh)** script. We'll call it **pipeline**.
+
+```
+cd $HOME/dev/windfire-restaurants-node/deployment/openshift
+./create-serviceaccount.sh
+```
 
 Running **[create-serviceaccount.sh](deployment/openshift/create-serviceaccount.sh)** script does everything that is needed:
 - it sets context to the OpenShift project selected (the project is automatically created if it does not pre-exist)
@@ -204,7 +209,14 @@ Running **[create-serviceaccount.sh](deployment/openshift/create-serviceaccount.
 - it links Secret for Quay credentials to **default** Service Account for pull
 
 ##### Run OpenShift pipeline
-Run **[create-pipeline.sh](deployment/openshift/tekton/create-pipeline.sh)** script to create the Pipeline and all the needed PipelineResources in your OpenShift cluster; the script does the following:
+Run **[create-pipeline.sh](deployment/openshift/tekton/create-pipeline.sh)** script to create the Pipeline and all the needed PipelineResources in your OpenShift cluster.
+
+```
+cd $HOME/dev/windfire-restaurants-node/deployment/openshift/tekton
+./create-pipeline.sh
+```
+
+The script does the following:
 
 1. It uses **[pvc.yaml](deployment/openshift/tekton/pvc.yaml)** file to create:
     - *windfire-restaurants-pvc* PersistentVolumeClaim, which provides data storage and binds it to the Workspace. This PersistentVolumeClaim provides the volumes or filesystem required for the Pipeline execution.
@@ -221,11 +233,25 @@ The Pipeline performs the following tasks for the back-end application *vote*:
 - Deploy the image to OpenShift wrapping an *oc new-app* command using *openshift-client* ClusterTask.
 - Expose a Route wrapping an *oc expose* command using *openshift-client* ClusterTask.
 
-Once you have created the Pipeline, you can go to OpenShift web console and start it; alternatively you can also launch **[run-pipeline.sh](deployment/openshift/tekton/run-pipeline.sh)** script which uses **[windfire-restaurants-backend-pipelinerun.yaml](deployment/openshift/tekton/windfire-restaurants-backend-pipelinerun.yaml)** file to run the Pipeline using the previously created PipelineResources:
+Once you have created the Pipeline, you can launch **[run-pipeline.sh](deployment/openshift/tekton/run-pipeline.sh)** script to run the pipeline.
+
+```
+cd $HOME/dev/windfire-restaurants-node/deployment/openshift/tekton
+./run-pipeline.sh
+```
+
+The script uses **[windfire-restaurants-backend-pipelinerun.yaml](deployment/openshift/tekton/windfire-restaurants-backend-pipelinerun.yaml)** file to run the Pipeline using the previously created PipelineResources:
     - *windfire-restaurants-node-git*: https://github.com/robipozzi/windfire-restaurants-node
     - *windfire-restaurants-node-image*: image-registry.openshift-image-registry.svc:5000/windfire/vote-api:2.0
 
+Alternatively you can obviously go to OpenShift web console and start the pipeline from the GUI.
+
 Run **[delete-pipeline.sh](deployment/openshift/tekton/delete-pipeline.sh)** script to delete Pipeline and PipelineResources at once.
+
+```
+cd $HOME/dev/windfire-restaurants-node/deployment/openshift/tekton
+./delete-pipeline.sh
+```
 
 #### Jenkins pipeline
 To use this approach, you will firstly need to have access to a Jenkins instance and configure it appropriately; refer to my other GitHub repository https://github.com/robipozzi/devops/blob/master/Jenkins/README.md for instructions on how to setup and configure Jenkins on OpenShift itself.
