@@ -236,13 +236,13 @@ The Pipeline performs the following tasks for the back-end application *vote*:
 Once you have created the Pipeline, you can launch **[run-pipeline.sh](deployment/openshift/tekton/run-pipeline.sh)** script to run the pipeline.
 
 ```
-cd $HOME/dev/windfire-restaurants-node/deployment/openshift/tekton
-./run-pipeline.sh
+cd $HOME/dev/windfire-restaurants-node
+./deploy.sh 5
 ```
 
 The script uses **[windfire-restaurants-backend-pipelinerun.yaml](deployment/openshift/tekton/windfire-restaurants-backend-pipelinerun.yaml)** file to run the Pipeline using the previously created PipelineResources:
-    - *windfire-restaurants-node-git*: https://github.com/robipozzi/windfire-restaurants-node
-    - *windfire-restaurants-node-image*: image-registry.openshift-image-registry.svc:5000/windfire/vote-api:2.0
+- *windfire-restaurants-node-git*: https://github.com/robipozzi/windfire-restaurants-node
+- *windfire-restaurants-node-image*: image-registry.openshift-image-registry.svc:5000/windfire/vote-api:2.0
 
 Alternatively you can obviously go to OpenShift web console and start the pipeline from the GUI.
 
