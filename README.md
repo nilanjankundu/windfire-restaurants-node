@@ -246,6 +246,15 @@ The script uses **[windfire-restaurants-backend-pipelinerun.yaml](deployment/ope
 
 Alternatively you can obviously go to OpenShift web console and start the pipeline from the GUI.
 
+##### Remove application from OpenShift
+Run **[undeploy.sh](undeploy.sh)** script with option 3 to undeploy the application, removing all the related OpenShift objects.
+
+```
+cd $HOME/dev/windfire-restaurants-node/
+./undeploy.sh 3
+```
+
+##### Delete OpenShift pipeline
 Run **[delete-pipeline.sh](deployment/openshift/tekton/delete-pipeline.sh)** script to delete Pipeline and PipelineResources at once.
 
 ```
