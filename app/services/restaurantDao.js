@@ -42,9 +42,9 @@ function initConfig() {
         // Get database connection configuration from a Secret
         logger.info("######## RestaurantDao.initConfig - parsing secret for Database connection configuration ... ");
         const mongodb = JSON.parse(dbSecret).connection.mongodb;
-        logger.debug("######## RestaurantDao.initConfig - mongodb = " + JSON.stringify(mongodb));
+        //logger.debug("######## RestaurantDao.initConfig - mongodb = " + JSON.stringify(mongodb));
         uri = JSON.stringify(mongodb.composed[0]);
-        logger.debug("######## RestaurantDao.initConfig - uri (parsed from secret) = " + uri);
+        //logger.debug("######## RestaurantDao.initConfig - uri (parsed from secret) = " + uri);
     } else { 
         // No Secret found, get database connection configuration from environment variables
         // If no environment variables are defined, try get database connection configuration from config file
@@ -56,7 +56,6 @@ function initConfig() {
     }
     dbName = process.env.DB_NAME || configuration.getProperty('db.name');
     collection = process.env.DB_COLLECTION || configuration.getProperty('db.collection');
-    logger.debug("######## RestaurantDao.config called, will connect to uri " + uri + " ...");
 }
 
 function findAll(callback) {
@@ -72,9 +71,11 @@ function findAll(callback) {
 
 function create(inputData, callback) {
     initConfig();
-    logger.debug("######## RestaurantDao.create called and connecting to uri " + uri + " ...");
+    logger.debug("######## RestaurantDao.create called and connecting to MongoDb with the following parameters:");
+    logger.debug("########      MongoDB URL = " + dbUrl);
+    logger.debug("########      MongoDB Username = " + dbUser);
     MongoClient.connect(uri, mongodbOptions, function(err, db) {
-        logger.info("######## Connecting to uri " + uri + "...");
+        logger.info("######## Connecting ...");
         if (err) 
             throw err;
         logger.info("######## Connecting db " + dbName + " ...");
@@ -94,9 +95,11 @@ function create(inputData, callback) {
 
 function removeById(id, callback) {
     initConfig();
-    logger.debug("######## RestaurantDao.removeById called and connecting to uri " + uri + " ...");
+    logger.debug("######## RestaurantDao.removeById called and connecting to MongoDb with the following parameters:");
+    logger.debug("########      MongoDB URL = " + dbUrl);
+    logger.debug("########      MongoDB Username = " + dbUser);
     MongoClient.connect(uri, mongodbOptions, function(err, db) {
-        logger.info("######## Connecting to uri " + uri + "...");
+        logger.info("######## Connecting ...");
         if (err) 
             throw err;
         logger.info("######## Connecting db " + dbName + " ...");
@@ -116,7 +119,9 @@ function removeById(id, callback) {
 // ################### MongoDb Data Access - START
 function __findAllMongoDb(callback) {
 	initConfig();
-    logger.debug("######## RestaurantDao.findAll called and connecting to uri " + uri + " ...");
+    logger.debug("######## RestaurantDao.findAll called and connecting to MongoDb with the following parameters:");
+    logger.debug("########      MongoDB URL = " + dbUrl);
+    logger.debug("########      MongoDB Username = " + dbUser);
     MongoClient.connect(uri, mongodbOptions, function(err, db) {
         logger.info("######## Connecting ...");
         if (err) 
@@ -136,6 +141,7 @@ function __findAllMongoDb(callback) {
 // ################### MongoDb Data Access - END
 // =================== Fake Data Access - START
 function __fakeFindAll(callback) {
+    logger.debug("######## RestaurantDao.findAll called, returning fake list ...");
 	var restaurant1 = { id : 1, name : "Hostaria Vecchio Portico", city : "Arona", rating: 4};
 	var restaurant2 = { id : 2, name : "Il Ragazzo di Campagna", city : "Gallarate", rating: 4}
 	var restaurant3 = { id : 3, name : "Il Cormorano", city : "Milano", rating: 3}
