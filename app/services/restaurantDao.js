@@ -52,7 +52,7 @@ function initConfig() {
         // No Secret found, get database connection configuration from environment variables
         // If no environment variables are defined, try get database connection configuration from config file
         dbUrl = process.env.DB_URL || configuration.getProperty('db.url');
-        replicaSet = process.env.DB_REPLICASET || configuration.getProperty('db.replicaset');
+        //replicaSet = process.env.DB_REPLICASET || configuration.getProperty('db.replicaset');
         dbUser = process.env.DB_USER || configuration.getProperty('db.user');
         dbPassword = process.env.DB_PASSWORD || configuration.getProperty('db.password');
         dbName = process.env.DB_NAME || configuration.getProperty('db.name');

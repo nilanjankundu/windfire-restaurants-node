@@ -75,6 +75,15 @@ objects:
             #      secretKeyRef:
             #        name: ${DB_SECRET}
             #        key: binding
+            - name: DB_URL
+              value: ${DB_URL}
+            - name: DB_USER
+              value: ${DB_USER}
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: ${MONGODB_SECRET}
+                  key: PASSWORD
             - name: DB_NAME
               value: ${DB_NAME}
             - name: DB_COLLECTION
@@ -157,10 +166,19 @@ parameters:
     required: true
   - name: DB_TYPE
     required: true
-    value: fake
+    value: mongodb
   - name: DB_SECRET
     required: true
     value: binding-mongodb-demo
+  - name: MONGODB_SECRET
+    required: true
+    value: mongodb-secret
+  - name: DB_URL
+    required: true
+    value: windfire.rxdd4.mongodb.net
+  - name: DB_USER
+    required: true
+    value: mongodb
   - name: DB_NAME
     required: true
     value: restaurants
