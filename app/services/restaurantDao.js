@@ -13,7 +13,7 @@ let dbUrl;
 let dbUser;
 let dbPassword;
 let dbName;
-let collection;
+let dbCollection;
 let replicaSet;
 let uri;
 // Read the certificate authority
@@ -22,15 +22,18 @@ var ca = [fs.readFileSync(process.cwd() + "/tls/ibmcloud-mongodb")];
 const MongoClient = mongodb.MongoClient;
 const mongodbOptions = {
     useNewUrlParser: true,
+    useUnifiedTopology: true
+};
+const mongodbSslOptions = {
+    useNewUrlParser: true,
     useUnifiedTopology: true,
     tlsAllowInvalidCertificates: true,
-    replSet: { 
-        ssl: true,
-        sslValidate:true,
-        checkServerIdentity:false,
-        sslCA: ca
-    }
+    ssl: true,
+    sslValidate:true,
+    checkServerIdentity:false,
+    sslCA: ca
 }
+
 // #######################
 // ###### Functions ######
 // #######################
@@ -52,10 +55,11 @@ function initConfig() {
         replicaSet = process.env.DB_REPLICASET || configuration.getProperty('db.replicaset');
         dbUser = process.env.DB_USER || configuration.getProperty('db.user');
         dbPassword = process.env.DB_PASSWORD || configuration.getProperty('db.password');
-        uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=" + replicaSet + "&ssl=true";
+        dbName = process.env.DB_NAME || configuration.getProperty('db.name');
+        uri = "mongodb+srv://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/" + dbName + "?retryWrites=true&w=majority";
+        //uri = "mongodb://" + dbUser + ":" + dbPassword + "@" + dbUrl + "/?replicaSet=" + replicaSet + "&ssl=true";
     }
-    dbName = process.env.DB_NAME || configuration.getProperty('db.name');
-    collection = process.env.DB_COLLECTION || configuration.getProperty('db.collection');
+    dbCollection = process.env.DB_COLLECTION || configuration.getProperty('db.collection');
 }
 
 function findAll(callback) {
@@ -74,21 +78,21 @@ function create(inputData, callback) {
     logger.debug("######## RestaurantDao.create called and connecting to MongoDb with the following parameters:");
     logger.debug("########      MongoDB URL = " + dbUrl);
     logger.debug("########      MongoDB Username = " + dbUser);
-    MongoClient.connect(uri, mongodbOptions, function(err, db) {
+    logger.debug("########      MongoDB Database = " + dbName);
+    const client = new MongoClient(uri, mongodbOptions);
+    client.connect(err => {
         logger.info("######## Connecting ...");
-        if (err) 
-            throw err;
-        logger.info("######## Connecting db " + dbName + " ...");
-        var dbo = db.db(dbName);          
-        logger.info("######## Insert into collection " + collection + " ...");
+        const collection = client.db(dbName).collection(dbCollection);
+        // perform insert action on the collection object
         var restaurant = {name : inputData.name, city : inputData.city, cuisine : inputData.cuisine, address: {street : inputData.street, zipcode : inputData.zipcode}};
         logger.info("######## Restaurant (stringified) " + JSON.stringify(restaurant));
-        dbo.collection(collection).insertOne(restaurant, function(err, result) {
+        logger.info("######## Inserting into " + dbCollection + " collection ...");
+        collection.insertOne(restaurant, function(err, result) {
             if (err) 
                 throw err;
             logger.info("######## 1 document inserted ...");
+            client.close();
             callback(result);
-            db.close();
         });
     });
 }
@@ -98,20 +102,20 @@ function removeById(id, callback) {
     logger.debug("######## RestaurantDao.removeById called and connecting to MongoDb with the following parameters:");
     logger.debug("########      MongoDB URL = " + dbUrl);
     logger.debug("########      MongoDB Username = " + dbUser);
-    MongoClient.connect(uri, mongodbOptions, function(err, db) {
+    logger.debug("########      MongoDB Database = " + dbName);
+    const client = new MongoClient(uri, mongodbOptions);
+    client.connect(err => {
         logger.info("######## Connecting ...");
-        if (err) 
-            throw err;
-        logger.info("######## Connecting db " + dbName + " ...");
-        var dbo = db.db(dbName);          
-        logger.info("######## Delete object with id = " + id + " from collection " + collection + " ...");
+        const collection = client.db(dbName).collection(dbCollection);
+        // perform delete by id action on the collection object
+        logger.info("######## Deleting object with id = " + id + " from collection " + collection + " ...");
         var query = { _id: new mongodb.ObjectID(id) };
-        dbo.collection(collection).deleteOne(query, function(err, result) {
+        collection.deleteOne(query, function(err, result) {
             if (err) 
                 throw err;
             logger.info("######## 1 document deleted ...");
+            client.close();
             callback(result);
-            db.close();
         });
     });
 }
@@ -122,19 +126,19 @@ function __findAllMongoDb(callback) {
     logger.debug("######## RestaurantDao.findAll called and connecting to MongoDb with the following parameters:");
     logger.debug("########      MongoDB URL = " + dbUrl);
     logger.debug("########      MongoDB Username = " + dbUser);
-    MongoClient.connect(uri, mongodbOptions, function(err, db) {
+    logger.debug("########      MongoDB Database = " + dbName);
+    const client = new MongoClient(uri, mongodbOptions);
+    client.connect(err => {
         logger.info("######## Connecting ...");
-        if (err) 
-            throw err;
-        logger.info("######## Connecting db " + dbName + " ...");
-        var dbo = db.db(dbName);  
+        const collection = client.db(dbName).collection(dbCollection);
+        // perform find action on the collection object
         logger.info("######## Querying collection " + collection + " ...");
-        dbo.collection(collection).find().toArray(function(err, result) {
+        collection.find().toArray(function(err, result) {
             if (err) 
                 throw err;
             logger.info("######## Query executed ...");
+            client.close();
             callback(result);
-            db.close();
         });
     });
 }
