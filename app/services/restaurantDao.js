@@ -8,6 +8,7 @@ const fs = require('fs');
 // ###################################
 // ###### Variable declarations ######
 // ###################################
+let timeout = (process.env.TIMEOUT || configuration.getProperty('timeout'));
 let dbType = process.env.DB_TYPE || configuration.getProperty('db.type');
 let dbUrl;
 let dbUser;
@@ -22,11 +23,13 @@ var ca = [fs.readFileSync(process.cwd() + "/tls/ibmcloud-mongodb")];
 const MongoClient = mongodb.MongoClient;
 const mongodbOptions = {
     useNewUrlParser: true,
-    useUnifiedTopology: true
+    useUnifiedTopology: true,
+    serverSelectionTimeoutMS: timeout
 };
 const mongodbSslOptions = {
     useNewUrlParser: true,
     useUnifiedTopology: true,
+    serverSelectionTimeoutMS: timeout,
     tlsAllowInvalidCertificates: true,
     ssl: true,
     sslValidate:true,
@@ -38,16 +41,16 @@ const mongodbSslOptions = {
 // ###### Functions ######
 // #######################
 function initConfig() {
-    logger.info("######## RestaurantDao.initConfig called ...");
+    logger.info("restaurantDao.initConfig called ...");
     const dbSecret = process.env.DB_SECRET;
-    logger.info("######## RestaurantDao.initConfig - process.env.DB_SECRET = " + dbSecret);
+    logger.info("restaurantDao.initConfig - process.env.DB_SECRET = " + dbSecret);
     if (dbSecret != undefined) {
         // Get database connection configuration from a Secret
-        logger.info("######## RestaurantDao.initConfig - parsing secret for Database connection configuration ... ");
+        logger.info("restaurantDao.initConfig - parsing secret for Database connection configuration ... ");
         const mongodb = JSON.parse(dbSecret).connection.mongodb;
-        //logger.debug("######## RestaurantDao.initConfig - mongodb = " + JSON.stringify(mongodb));
+        //logger.debug("######## restaurantDao.initConfig - mongodb = " + JSON.stringify(mongodb));
         uri = JSON.stringify(mongodb.composed[0]);
-        //logger.debug("######## RestaurantDao.initConfig - uri (parsed from secret) = " + uri);
+        //logger.debug("######## restaurantDao.initConfig - uri (parsed from secret) = " + uri);
     } else { 
         // No Secret found, get database connection configuration from environment variables
         // If no environment variables are defined, try get database connection configuration from config file
@@ -75,7 +78,7 @@ function findAll(callback) {
 
 function create(inputData, callback) {
     initConfig();
-    logger.debug("######## RestaurantDao.create called and connecting to MongoDb with the following parameters:");
+    logger.debug("######## restaurantDao.create called and connecting to MongoDb with the following parameters:");
     logger.debug("########      MongoDB URL = " + dbUrl);
     logger.debug("########      MongoDB Username = " + dbUser);
     logger.debug("########      MongoDB Database = " + dbName);
@@ -87,19 +90,21 @@ function create(inputData, callback) {
         var restaurant = {name : inputData.name, city : inputData.city, cuisine : inputData.cuisine, address: {street : inputData.street, zipcode : inputData.zipcode}};
         logger.info("######## Restaurant (stringified) " + JSON.stringify(restaurant));
         logger.info("######## Inserting into " + dbCollection + " collection ...");
-        collection.insertOne(restaurant, function(err, result) {
-            if (err) 
-                throw err;
-            logger.info("######## 1 document inserted ...");
+        collection.insertOne(restaurant, function(error, result) {
+            if (error) {
+                logger.error("" + error);
+            } else {
+                logger.info("######## 1 document inserted ...");
+            }
             client.close();
-            callback(result);
+            callback(result, error);
         });
     });
 }
 
 function removeById(id, callback) {
     initConfig();
-    logger.debug("######## RestaurantDao.removeById called and connecting to MongoDb with the following parameters:");
+    logger.debug("######## restaurantDao.removeById called and connecting to MongoDb with the following parameters:");
     logger.debug("########      MongoDB URL = " + dbUrl);
     logger.debug("########      MongoDB Username = " + dbUser);
     logger.debug("########      MongoDB Database = " + dbName);
@@ -110,12 +115,14 @@ function removeById(id, callback) {
         // perform delete by id action on the collection object
         logger.info("######## Deleting object with id = " + id + " from collection " + collection + " ...");
         var query = { _id: new mongodb.ObjectID(id) };
-        collection.deleteOne(query, function(err, result) {
-            if (err) 
-                throw err;
-            logger.info("######## 1 document deleted ...");
+        collection.deleteOne(query, function(error, result) {
+            if (error) {
+                logger.error("" + error);
+            } else {
+                logger.info("######## 1 document deleted ...");
+            }
             client.close();
-            callback(result);
+            callback(result, error);
         });
     });
 }
@@ -123,29 +130,31 @@ function removeById(id, callback) {
 // ################### MongoDb Data Access - START
 function __findAllMongoDb(callback) {
 	initConfig();
-    logger.debug("######## RestaurantDao.findAll called and connecting to MongoDb with the following parameters:");
-    logger.debug("########      MongoDB URL = " + dbUrl);
-    logger.debug("########      MongoDB Username = " + dbUser);
-    logger.debug("########      MongoDB Database = " + dbName);
+    logger.debug("restaurantDao.findAll called and connecting to MongoDb with the following parameters:");
+    logger.debug("      MongoDB URL = " + dbUrl);
+    logger.debug("      MongoDB Username = " + dbUser);
+    logger.debug("      MongoDB Database = " + dbName);
     const client = new MongoClient(uri, mongodbOptions);
     client.connect(err => {
-        logger.info("######## Connecting ...");
+        logger.info("Connecting ...");
         const collection = client.db(dbName).collection(dbCollection);
         // perform find action on the collection object
-        logger.info("######## Querying collection " + collection + " ...");
-        collection.find().toArray(function(err, result) {
-            if (err) 
-                throw err;
-            logger.info("######## Query executed ...");
+        logger.info("Querying collection " + collection + " ...");
+        collection.find().toArray(function(error, result) {
+            if (error) {
+                logger.error("" + error);
+            } else {
+                logger.info("Query executed ...");
+            }
             client.close();
-            callback(result);
+            callback(result, error);
         });
     });
 }
 // ################### MongoDb Data Access - END
 // =================== Fake Data Access - START
 function __fakeFindAll(callback) {
-    logger.debug("######## RestaurantDao.findAll called, returning fake list ...");
+    logger.debug("######## restaurantDao.findAll called, returning fake list ...");
 	var restaurant1 = { id : 1, name : "Hostaria Vecchio Portico", city : "Arona", rating: 4};
 	var restaurant2 = { id : 2, name : "Il Ragazzo di Campagna", city : "Gallarate", rating: 4}
 	var restaurant3 = { id : 3, name : "Il Cormorano", city : "Milano", rating: 3}

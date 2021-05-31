@@ -68,6 +68,8 @@ objects:
         - name: ${APP_NAME}
           image: ${APP_NAME}:latest
           env:
+            - name: TIMEOUT
+              value: ${TIMEOUT}
             - name: DB_TYPE
               value: ${DB_TYPE}
             #- name: DB_SECRET
@@ -164,6 +166,9 @@ parameters:
     required: true
   - name: OPENSHIFT_CLUSTER_DOMAIN 
     required: true
+  - name: TIMEOUT
+    required: true
+    value: 5000
   - name: DB_TYPE
     required: true
     value: mongodb

@@ -7,17 +7,17 @@ var restaurantDao = require('./restaurantDao');
 // ###### Functions ######
 // #######################
 function getRestaurants(callback) {
-	logger.info("RestaurantService.getRestaurants called");
+	logger.info("restaurantService.getRestaurants called");
 	restaurantDao.findAll(callback);
 }
 
 function addRestaurant(data, callback) {
-	logger.info("RestaurantService.addRestaurant called");
+	logger.info("restaurantService.addRestaurant called");
 	restaurantDao.create(data, callback);
 }
 
 function deleteRestaurant(id, callback) {
-	logger.info("RestaurantService.addRestaurant called");
+	logger.info("restaurantService.deleteRestaurant called");
 	restaurantDao.removeById(id, callback);
 }
 // ################### Exposed APIs

@@ -10,9 +10,15 @@ module.exports = function(app, logger) {
     app.get('/restaurants', function (httpRequest, httpResponse) {
         logger.info("GET /restaurants endpoint called");
         logger.info("Calling restaurantService.getRestaurants() ...");
-        restaurantService.getRestaurants(function(response) {
-            console.log("############# restaurant.js : " + response);
-            httpResponse.json(response);
+        restaurantService.getRestaurants(function(response, error) {
+            if (error) {
+                logger.error("Error type = " + error.name);
+                var err = {error:'Database connection error'};
+                httpResponse.json(err);
+            } else {
+                logger.info("GET /restaurants response : " + response);
+                httpResponse.json(response);
+            }
         });
     });
     // ##############################
@@ -21,9 +27,15 @@ module.exports = function(app, logger) {
     app.post('/restaurants', function (httpRequest, httpResponse) {
         logger.info("POST /restaurants endpoint called");
         logger.info("Calling restaurantService.addRestaurant() ...");
-        restaurantService.addRestaurant(httpRequest.body, function(response) {
-            console.log("############# restaurant.js : " + response);
-            httpResponse.json(response);
+        restaurantService.addRestaurant(httpRequest.body, function(response, error) {
+            if (error) {
+                logger.error("Error type = " + error.name);
+                var err = {error:'Database connection error'};
+                httpResponse.json(err);
+            } else {
+                logger.info("POST /restaurants response : " + response);
+                httpResponse.json(response);
+            }
         });
     });
     // ################################
@@ -32,9 +44,15 @@ module.exports = function(app, logger) {
     app.delete('/restaurants/:id', function (httpRequest, httpResponse) {
         logger.info("DELETE /restaurants endpoint called");
         logger.info("Calling restaurantService.deleteRestaurant() ...");
-        restaurantService.deleteRestaurant(httpRequest.params.id, function(response) {
-            console.log("############# restaurant.js : " + response);
-            httpResponse.json(response);
+        restaurantService.deleteRestaurant(httpRequest.params.id, function(response, error) {
+            if (error) {
+                logger.error("Error type = " + error.name);
+                var err = {error:'Database connection error'};
+                httpResponse.json(err);
+            } else {
+                logger.info("DELETE /restaurants response : " + response);
+                httpResponse.json(response);
+            }
         });
     });
 };
