@@ -36,7 +36,6 @@ const mongodbSslOptions = {
     checkServerIdentity:false,
     sslCA: ca
 }
-
 // #######################
 // ###### Functions ######
 // #######################
